@@ -18,7 +18,7 @@ export function markdownToHtml(markdown: string): string {
   let listType = '';
 
   for (let i = 0; i < lines.length; i++) {
-    let line = lines[i];
+    const line = lines[i];
 
     // Headers (h1-h6)
     const headerMatch = line.match(/^(#{1,6})\s+(.+)$/);

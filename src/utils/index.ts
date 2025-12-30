@@ -86,7 +86,6 @@ export function generateId(prefix = 'id'): string {
   return `${prefix}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 }
 
-
 /**
  * Parse attributes from element
  */
@@ -104,9 +103,6 @@ export function parseNumberAttribute(value: string | null, defaultValue: number)
   const parsed = Number.parseInt(value, 10);
   return Number.isNaN(parsed) ? defaultValue : parsed;
 }
-
-
-
 
 /**
  * Create custom event

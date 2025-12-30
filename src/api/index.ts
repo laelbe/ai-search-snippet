@@ -1,6 +1,5 @@
-/** biome-ignore-all lint/correctness/noUnusedFunctionParameters: <explanation> */
+/** biome-ignore-all lint/correctness/noUnusedFunctionParameters: this is a placeholder */
 import type { ChatTypes, RequestState, SearchError, SearchOptions, SearchResult } from '../types';
-
 
 export class Client {
   activeRequests: Map<string, RequestState> = new Map();

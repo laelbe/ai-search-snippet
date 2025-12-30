@@ -2,7 +2,6 @@
  * Core type definitions for the Search Snippet Library
  */
 
-
 export type ComponentMode = 'search' | 'chat';
 export type Theme = 'light' | 'dark' | 'auto';
 export type GenerateMode = 'list' | 'summarize';
@@ -59,53 +58,49 @@ export type ChatResult = {
   url?: string;
   metadata?: Record<string, unknown>;
   type: 'result';
-}
+};
 
 export type ChatTextResponse = {
   type: 'text';
   message: string;
-}
+};
 
 export type ChatError = {
   type: 'error';
   message: string;
-}
+};
 
 export type ChatTypes = ChatResult | ChatTextResponse | ChatError;
 
-
-
-
 export type Result = {
-    url: string;
-    name: string;
-    site: string;
-    siteUrl: string;
-    score?: number;
-    description?: string;
-    schema_object?: any;
-    ranking_type?: string;
-  }
+  url: string;
+  name: string;
+  site: string;
+  siteUrl: string;
+  score?: number;
+  description?: string;
+  schema_object?: unknown;
+  ranking_type?: string;
+};
 
 export type ResultBatch = {
-  message_type: "result_batch";
+  message_type: 'result_batch';
   results: Result[];
   query_id?: string;
 };
 
 export type ErrorResponse = {
-  message_type: "error";
+  message_type: 'error';
   message: string;
-}
+};
 
 export type SummarizeResponse = {
-    message_type: "summary";
-    message: string;
-}
+  message_type: 'summary';
+  message: string;
+};
 
-export type NLWebNonStreamingResponse = Omit<ResultBatch, 'message_type'> & {  error?: string }; 
-export type NLWebResponses = ResultBatch | ErrorResponse | SummarizeResponse
-
+export type NLWebNonStreamingResponse = Omit<ResultBatch, 'message_type'> & { error?: string };
+export type NLWebResponses = ResultBatch | ErrorResponse | SummarizeResponse;
 
 /**
  * Search options
@@ -113,7 +108,7 @@ export type NLWebResponses = ResultBatch | ErrorResponse | SummarizeResponse
 export interface SearchOptions {
   query?: string;
   site?: string | string[];
-  generate_mode?: "list" | "summarize" | "generate" | "none";
+  generate_mode?: 'list' | 'summarize' | 'generate' | 'none';
   streaming?: boolean;
   prev?: string[];
   last_ans?: { title: string; url: string }[];
@@ -121,7 +116,7 @@ export interface SearchOptions {
   model?: string;
   oauth_id?: string;
   thread_id?: string;
-  display_mode?: "full" | (string & {});
+  display_mode?: 'full' | (string & {});
   signal?: AbortSignal;
 }
 

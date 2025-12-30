@@ -724,8 +724,12 @@
         const cssValues = new Map();
 
         // Initialize defaults
-        PROP_CONFIGS.forEach(p => propValues.set(p.name, p.defaultValue));
-        CSS_VAR_CONFIGS.forEach(c => cssValues.set(c.name, c.defaultValue));
+        PROP_CONFIGS.forEach(p => {
+            propValues.set(p.name, p.defaultValue)
+        });
+        CSS_VAR_CONFIGS.forEach(c => {
+            cssValues.set(c.name, c.defaultValue)
+        });
 
         // Render functions
         function renderProps() {
@@ -795,7 +799,9 @@
 
             // Apply CSS
             const css = [];
-            cssValues.forEach((v, n) => css.push(`${n}: ${v}`));
+            cssValues.forEach((v, n) => {
+                css.push(`${n}: ${v}`);
+            });
             el.style.cssText = css.join('; ');
 
             container.appendChild(el);
@@ -818,13 +824,17 @@
                 if (c && v !== c.defaultValue) css.push(`  ${n}: ${v};`);
             });
 
-            const code = `<!-- HTML -->\n<${tag}${props.length ? '\n' + props.join('\n') : ''}>\n</${tag}>\n\n<!-- CSS -->\n<style>\n${tag} {\n${css.join('\n')}\n}\n</style>`;
+            const code = `<!-- HTML -->\n<${tag}${props.length ? `\n${props.join('\n')}` : ''}>\n</${tag}>\n\n<!-- CSS -->\n<style>\n${tag} {\n${css.join('\n')}\n}\n</style>`;
             document.getElementById('generatedCode').textContent = code;
         }
 
         function resetConfig() {
-            PROP_CONFIGS.forEach(p => propValues.set(p.name, p.defaultValue));
-            CSS_VAR_CONFIGS.forEach(c => cssValues.set(c.name, c.defaultValue));
+            PROP_CONFIGS.forEach(p => {
+                propValues.set(p.name, p.defaultValue);
+            });
+            CSS_VAR_CONFIGS.forEach(c => {
+                cssValues.set(c.name, c.defaultValue);
+            });
             renderProps();
             renderCSSVars();
             updatePreview();
@@ -837,7 +847,7 @@
                 const btn = document.getElementById('copyBtn');
                 const orig = btn.textContent;
                 btn.textContent = 'Copied!';
-                setTimeout(() => btn.textContent = orig, 2000);
+                setTimeout(() => { btn.textContent = orig }, 2000);
             } catch (e) {
                 console.error('Copy failed:', e);
             }
@@ -848,7 +858,9 @@
             // Tab switching
             document.querySelectorAll('.config-tab').forEach(tab => {
                 tab.addEventListener('click', e => {
-                    document.querySelectorAll('.config-tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.config-tab').forEach(t => {
+                        t.classList.remove('active');
+                    });
                     e.target.classList.add('active');
                     currentSnippet = e.target.dataset.snippet;
                     renderProps();

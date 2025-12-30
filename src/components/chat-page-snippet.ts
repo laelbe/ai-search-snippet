@@ -280,7 +280,11 @@ export class ChatPageSnippet extends HTMLElement {
     // For 'auto' mode, remove the attribute to let @media (prefers-color-scheme) work
     const validTheme = theme === 'light' || theme === 'dark' ? theme : null;
 
-    if (validTheme === null && this.hasAttribute('theme') && this.getAttribute('theme') !== 'auto') {
+    if (
+      validTheme === null &&
+      this.hasAttribute('theme') &&
+      this.getAttribute('theme') !== 'auto'
+    ) {
       this.removeAttribute('theme');
     }
   }

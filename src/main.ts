@@ -14,8 +14,8 @@ export { NLWebClient } from './api/nlweb-client.ts';
 
 // Export all snippet components
 export { ChatBubbleSnippet } from './components/chat-bubble-snippet.ts';
-export { SearchBarSnippet } from './components/search-bar-snippet.ts';
 export { ChatPageSnippet } from './components/chat-page-snippet.ts';
+export { SearchBarSnippet } from './components/search-bar-snippet.ts';
 
 // Export types for TypeScript users
 export type {

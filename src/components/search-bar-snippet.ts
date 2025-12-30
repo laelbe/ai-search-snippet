@@ -8,113 +8,113 @@ import { searchStyles } from '../styles/search.ts';
 import { baseStyles } from '../styles/theme.ts';
 import type { Clients, SearchResult, SearchSnippetProps } from '../types/index.ts';
 import {
-    createClient,
-    createCustomEvent,
-    debounce,
-    escapeHTML,
-    parseAttribute,
-    parseBooleanAttribute,
-    parseNumberAttribute,
+  createClient,
+  createCustomEvent,
+  debounce,
+  escapeHTML,
+  parseAttribute,
+  parseBooleanAttribute,
+  parseNumberAttribute,
 } from '../utils/index.ts';
 
 const COMPONENT_NAME = 'search-bar-snippet';
 
 export class SearchBarSnippet extends HTMLElement {
-    private shadow: ShadowRoot;
-    private client: Client | null = null;
-    private container: HTMLElement | null = null;
-    private inputElement: HTMLInputElement | null = null;
-    private resultsContainer: HTMLElement | null = null;
-    private searchButton: HTMLButtonElement | null = null;
-    private isLoading = false;
-    private currentQuery = '';
-    private debouncedSearch: ((query: string) => void) | null = null;
+  private shadow: ShadowRoot;
+  private client: Client | null = null;
+  private container: HTMLElement | null = null;
+  private inputElement: HTMLInputElement | null = null;
+  private resultsContainer: HTMLElement | null = null;
+  private searchButton: HTMLButtonElement | null = null;
+  private isLoading = false;
+  private currentQuery = '';
+  private debouncedSearch: ((query: string) => void) | null = null;
 
-    static get observedAttributes(): string[] {
-        return [
-            'api-url',
-            'api-key',
-            'placeholder',
-            'max-results',
-            'debounce-ms',
-            'enable-streaming',
-            'client',
-            'theme',
-        ];
+  static get observedAttributes(): string[] {
+    return [
+      'api-url',
+      'api-key',
+      'placeholder',
+      'max-results',
+      'debounce-ms',
+      'enable-streaming',
+      'client',
+      'theme',
+    ];
+  }
+
+  constructor() {
+    super();
+    this.shadow = this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback(): void {
+    this.initializeClient();
+    this.render();
+    this.dispatchEvent(createCustomEvent('ready', undefined));
+  }
+
+  disconnectedCallback(): void {
+    this.cleanup();
+  }
+
+  attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
+    if (oldValue === newValue) return;
+
+    if (name === 'api-url' || name === 'client') {
+      this.initializeClient();
+    } else if (name === 'theme') {
+      // Theme changes are handled automatically by CSS :host([theme]) selectors
+      // But we trigger this to ensure any dynamic updates are applied
+      this.updateTheme(newValue);
+    }
+  }
+
+  private getProps(): SearchSnippetProps {
+    return {
+      apiUrl: parseAttribute(this.getAttribute('api-url'), 'http://localhost:3000'),
+      mode: 'search',
+      apiKey: this.getAttribute('api-key') || undefined,
+      placeholder: parseAttribute(this.getAttribute('placeholder'), 'Search...'),
+      maxResults: parseNumberAttribute(this.getAttribute('max-results'), 10),
+      debounceMs: parseNumberAttribute(this.getAttribute('debounce-ms'), 300),
+      enableStreaming: parseBooleanAttribute(this.getAttribute('enable-streaming'), false),
+      theme: parseAttribute(this.getAttribute('theme'), 'auto') as 'light' | 'dark' | 'auto',
+      client: parseAttribute(this.getAttribute('client'), 'nlweb') as Clients,
+    };
+  }
+
+  private initializeClient(): void {
+    const props = this.getProps();
+
+    if (!props.apiUrl) {
+      console.error('SearchBarSnippet: api-url attribute is required');
+      return;
     }
 
-    constructor() {
-        super();
-        this.shadow = this.attachShadow({ mode: 'open' });
+    try {
+      this.client = createClient(props.client, props.apiUrl);
+    } catch (error) {
+      console.error('SearchBarSnippet:', error);
     }
+  }
 
-    connectedCallback(): void {
-        this.initializeClient();
-        this.render();
-        this.dispatchEvent(createCustomEvent('ready', undefined));
-    }
+  private render(): void {
+    const props = this.getProps();
 
-    disconnectedCallback(): void {
-        this.cleanup();
-    }
+    // Create debounced search function
+    const searchFn = (query: string) => this.performSearch(query);
+    this.debouncedSearch = debounce(
+      searchFn as (...args: unknown[]) => unknown,
+      props.debounceMs || 400
+    ) as (query: string) => void;
 
-    attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
-        if (oldValue === newValue) return;
+    const style = document.createElement('style');
+    style.textContent = `${baseStyles}\n${searchStyles}`;
 
-        if (name === 'api-url' || name === 'client') {
-            this.initializeClient();
-        } else if (name === 'theme') {
-            // Theme changes are handled automatically by CSS :host([theme]) selectors
-            // But we trigger this to ensure any dynamic updates are applied
-            this.updateTheme(newValue);
-        }
-    }
-
-    private getProps(): SearchSnippetProps {
-        return {
-            apiUrl: parseAttribute(this.getAttribute('api-url'), 'http://localhost:3000'),
-            mode: 'search',
-            apiKey: this.getAttribute('api-key') || undefined,
-            placeholder: parseAttribute(this.getAttribute('placeholder'), 'Search...'),
-            maxResults: parseNumberAttribute(this.getAttribute('max-results'), 10),
-            debounceMs: parseNumberAttribute(this.getAttribute('debounce-ms'), 300),
-            enableStreaming: parseBooleanAttribute(this.getAttribute('enable-streaming'), false),
-            theme: parseAttribute(this.getAttribute('theme'), 'auto') as 'light' | 'dark' | 'auto',
-            client: parseAttribute(this.getAttribute('client'), 'nlweb') as Clients,
-        };
-    }
-
-    private initializeClient(): void {
-        const props = this.getProps();
-
-        if (!props.apiUrl) {
-            console.error('SearchBarSnippet: api-url attribute is required');
-            return;
-        }
-
-        try {
-            this.client = createClient(props.client, props.apiUrl);
-        } catch (error) {
-            console.error('SearchBarSnippet:', error);
-        }
-    }
-
-    private render(): void {
-        const props = this.getProps();
-
-        // Create debounced search function
-        const searchFn = (query: string) => this.performSearch(query);
-        this.debouncedSearch = debounce(
-            searchFn as (...args: unknown[]) => unknown,
-            props.debounceMs || 400
-        ) as (query: string) => void;
-
-        const style = document.createElement('style');
-        style.textContent = `${baseStyles}\n${searchStyles}`;
-
-        this.container = document.createElement('div');
-        this.container.className = 'container';
-        this.container.innerHTML = `
+    this.container = document.createElement('div');
+    this.container.className = 'container';
+    this.container.innerHTML = `
             <div class="search-view"> 
                 <div class="search-input-wrapper">
                     <svg xmlns="http://www.w3.org/2000/svg" class="search-icon" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg>
@@ -138,141 +138,141 @@ export class SearchBarSnippet extends HTMLElement {
             </div>
         `;
 
-        this.shadow.innerHTML = '';
-        this.shadow.appendChild(style);
-        this.shadow.appendChild(this.container);
+    this.shadow.innerHTML = '';
+    this.shadow.appendChild(style);
+    this.shadow.appendChild(this.container);
 
-        // Get references to elements
-        this.inputElement = this.container.querySelector('.search-input');
-        this.resultsContainer = this.container.querySelector('.search-results-wrapper');
-        this.searchButton = this.container.querySelector('.search-submit-button');
+    // Get references to elements
+    this.inputElement = this.container.querySelector('.search-input');
+    this.resultsContainer = this.container.querySelector('.search-results-wrapper');
+    this.searchButton = this.container.querySelector('.search-submit-button');
 
-        this.attachEventListeners();
-    }
+    this.attachEventListeners();
+  }
 
-    private attachEventListeners(): void {
-        if (!this.inputElement) return;
+  private attachEventListeners(): void {
+    if (!this.inputElement) return;
 
-        // Input event for real-time search
-        this.inputElement.addEventListener('input', (e) => {
-            const target = e.target as HTMLInputElement;
-            const query = target.value.trim();
+    // Input event for real-time search
+    this.inputElement.addEventListener('input', (e) => {
+      const target = e.target as HTMLInputElement;
+      const query = target.value.trim();
 
-            if (query.length > 0 && this.debouncedSearch) {
-                this.debouncedSearch(query);
-            } else {
-                this.showEmptyState();
-            }
-        });
+      if (query.length > 0 && this.debouncedSearch) {
+        this.debouncedSearch(query);
+      } else {
+        this.showEmptyState();
+      }
+    });
 
-        // Enter key to search immediately
-        this.inputElement.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                const query = (e.target as HTMLInputElement).value.trim();
-                if (query.length > 0) {
-                    this.performSearch(query);
-                }
-            }
-        });
-
-        this.inputElement.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && this.inputElement) {
-                this.inputElement.value = '';
-            }
-        });
-
-        // Search button click
-        if (this.searchButton) {
-            this.searchButton.addEventListener('click', () => {
-                const query = this.inputElement?.value.trim() || '';
-                if (query.length > 0) {
-                    this.performSearch(query);
-                }
-            });
+    // Enter key to search immediately
+    this.inputElement.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const query = (e.target as HTMLInputElement).value.trim();
+        if (query.length > 0) {
+          this.performSearch(query);
         }
-    }
+      }
+    });
 
-    private async performSearch(query: string): Promise<void> {
-        if (this.isLoading || query === this.currentQuery || !this.client) return;
+    this.inputElement.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && this.inputElement) {
+        this.inputElement.value = '';
+      }
+    });
 
-        this.currentQuery = query;
-        this.isLoading = true;
-        this.showLoadingState();
-
-        const results: SearchResult[] = [];
-        let hasError = false;
-
-        const props = this.getProps();
-        const streaming = props.enableStreaming;
-
-        if (streaming) {
-            try {
-                for await (const chunk of this.client.searchStream(query)) {
-                    if (chunk.type === 'result') {
-                        results.push(chunk);
-                        this.displayResults(results, query);
-                    } else if (chunk.type === 'error') {
-                        hasError = true;
-                        this.showErrorState(chunk.message || 'Unknown error');
-
-                        // Emit error event
-                        this.dispatchEvent(
-                            createCustomEvent('error', {
-                                error: {
-                                    message: chunk.message || 'Unknown error',
-                                    code: 'SEARCH_ERROR',
-                                },
-                            })
-                        );
-                        break;
-                    }
-                }
-
-                // Emit search event with all results
-                if (!hasError) {
-                    this.dispatchEvent(createCustomEvent('search', { query, results }));
-                }
-
-                // Show no results if we got none
-                if (results.length === 0 && !hasError) {
-                    this.showNoResultsState(query);
-                }
-            } catch (error) {
-                this.showErrorState((error as Error).message);
-
-                // Emit error event
-                this.dispatchEvent(
-                    createCustomEvent('error', {
-                        error: {
-                            message: (error as Error).message,
-                            code: 'SEARCH_ERROR',
-                        },
-                    })
-                );
-            } finally {
-                this.isLoading = false;
-            }
-        } else {
-            try {
-                const results = await this.client.search(query, { streaming });
-                this.displayResults(results, query);
-            } catch (error) {
-                this.showErrorState((error as Error).message);
-            } finally {
-                this.isLoading = false;
-            }
+    // Search button click
+    if (this.searchButton) {
+      this.searchButton.addEventListener('click', () => {
+        const query = this.inputElement?.value.trim() || '';
+        if (query.length > 0) {
+          this.performSearch(query);
         }
+      });
     }
+  }
 
-    private displayResults(results: SearchResult[], query: string): void {
-        if (!this.resultsContainer) return;
+  private async performSearch(query: string): Promise<void> {
+    if (this.isLoading || query === this.currentQuery || !this.client) return;
 
-        if (results.length === 0) {
-            this.showNoResultsState(query);
-            return;
+    this.currentQuery = query;
+    this.isLoading = true;
+    this.showLoadingState();
+
+    const results: SearchResult[] = [];
+    let hasError = false;
+
+    const props = this.getProps();
+    const streaming = props.enableStreaming;
+
+    if (streaming) {
+      try {
+        for await (const chunk of this.client.searchStream(query)) {
+          if (chunk.type === 'result') {
+            results.push(chunk);
+            this.displayResults(results, query);
+          } else if (chunk.type === 'error') {
+            hasError = true;
+            this.showErrorState(chunk.message || 'Unknown error');
+
+            // Emit error event
+            this.dispatchEvent(
+              createCustomEvent('error', {
+                error: {
+                  message: chunk.message || 'Unknown error',
+                  code: 'SEARCH_ERROR',
+                },
+              })
+            );
+            break;
+          }
         }
 
-        const resultsHTML = `
+        // Emit search event with all results
+        if (!hasError) {
+          this.dispatchEvent(createCustomEvent('search', { query, results }));
+        }
+
+        // Show no results if we got none
+        if (results.length === 0 && !hasError) {
+          this.showNoResultsState(query);
+        }
+      } catch (error) {
+        this.showErrorState((error as Error).message);
+
+        // Emit error event
+        this.dispatchEvent(
+          createCustomEvent('error', {
+            error: {
+              message: (error as Error).message,
+              code: 'SEARCH_ERROR',
+            },
+          })
+        );
+      } finally {
+        this.isLoading = false;
+      }
+    } else {
+      try {
+        const results = await this.client.search(query, { streaming });
+        this.displayResults(results, query);
+      } catch (error) {
+        this.showErrorState((error as Error).message);
+      } finally {
+        this.isLoading = false;
+      }
+    }
+  }
+
+  private displayResults(results: SearchResult[], query: string): void {
+    if (!this.resultsContainer) return;
+
+    if (results.length === 0) {
+      this.showNoResultsState(query);
+      return;
+    }
+
+    const resultsHTML = `
             <div class="search-header">
                 <div class="search-count">
                     Found ${results.length} result${results.length === 1 ? '' : 's'}
@@ -283,56 +283,56 @@ export class SearchBarSnippet extends HTMLElement {
             </div>
         `;
 
-        this.resultsContainer.innerHTML = resultsHTML;
+    this.resultsContainer.innerHTML = resultsHTML;
 
-        // Attach click handlers to results
-        this.attachResultHandlers();
-    }
+    // Attach click handlers to results
+    this.attachResultHandlers();
+  }
 
-    private renderResult(result: SearchResult): string {
-        return `
+  private renderResult(result: SearchResult): string {
+    return `
             <div class="search-result-item" role="button" tabindex="0" data-result-id="${escapeHTML(result.url || '')}">
                 <div class="search-result-title">${escapeHTML(result.title || '')}</div>
                 <div class="search-result-snippet">${escapeHTML(result.description || '')}</div>
                 ${result.url ? `<a href="${escapeHTML(result.url)}" class="search-result-url">${escapeHTML(result.url)}</a>` : ''}
             </div>
         `;
-    }
+  }
 
-    private attachResultHandlers(): void {
-        const resultItems = this.container?.querySelectorAll('.search-result-item');
-        if (!resultItems) return;
+  private attachResultHandlers(): void {
+    const resultItems = this.container?.querySelectorAll('.search-result-item');
+    if (!resultItems) return;
 
-        for (const item of resultItems) {
-            item.addEventListener('click', () => {
-                const resultId = item.getAttribute('data-result-id');
-                console.log('Result clicked:', resultId);
-            });
+    for (const item of resultItems) {
+      item.addEventListener('click', () => {
+        const resultId = item.getAttribute('data-result-id');
+        console.log('Result clicked:', resultId);
+      });
 
-            // Keyboard accessibility
-            item.addEventListener('keydown', (e) => {
-                if ((e as KeyboardEvent).key === 'Enter' || (e as KeyboardEvent).key === ' ') {
-                    (item as HTMLElement).click();
-                }
-            });
+      // Keyboard accessibility
+      item.addEventListener('keydown', (e) => {
+        if ((e as KeyboardEvent).key === 'Enter' || (e as KeyboardEvent).key === ' ') {
+          (item as HTMLElement).click();
         }
+      });
     }
+  }
 
-    private showLoadingState(): void {
-        if (!this.resultsContainer) return;
+  private showLoadingState(): void {
+    if (!this.resultsContainer) return;
 
-        this.resultsContainer.innerHTML = `
+    this.resultsContainer.innerHTML = `
             <div class="search-loading">
                 <div class="loading" aria-label="Loading"></div>
                 <div>Searching...</div>
             </div>
         `;
-    }
+  }
 
-    private showEmptyState(): void {
-        if (!this.resultsContainer) return;
+  private showEmptyState(): void {
+    if (!this.resultsContainer) return;
 
-        this.resultsContainer.innerHTML = `
+    this.resultsContainer.innerHTML = `
             <div class="search-empty">
                 <svg class="search-empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="11" cy="11" r="8"></circle>
@@ -344,12 +344,12 @@ export class SearchBarSnippet extends HTMLElement {
                 </div>
             </div>
         `;
-    }
+  }
 
-    private showNoResultsState(query: string): void {
-        if (!this.resultsContainer) return;
+  private showNoResultsState(query: string): void {
+    if (!this.resultsContainer) return;
 
-        this.resultsContainer.innerHTML = `
+    this.resultsContainer.innerHTML = `
             <div class="search-empty">
                 <svg class="search-empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="11" cy="11" r="8"></circle>
@@ -361,50 +361,50 @@ export class SearchBarSnippet extends HTMLElement {
                 </div>
             </div>
         `;
-    }
+  }
 
-    private showErrorState(message: string): void {
-        if (!this.resultsContainer) return;
+  private showErrorState(message: string): void {
+    if (!this.resultsContainer) return;
 
-        this.resultsContainer.innerHTML = `
+    this.resultsContainer.innerHTML = `
             <div class="error">
                 <strong>Error:</strong> ${escapeHTML(message)}
             </div>
         `;
+  }
+
+  private updateTheme(theme: string | null): void {
+    // CSS custom properties via :host([theme]) selectors handle the actual theming
+    // This method is here for any additional theme-related logic if needed
+    const validTheme = theme === 'light' || theme === 'dark' || theme === 'auto' ? theme : 'auto';
+
+    // Ensure the attribute is set on the host for CSS selectors
+    if (validTheme === 'auto') {
+      // Let the @media (prefers-color-scheme) handle it
+      this.removeAttribute('theme');
+    } else {
+      this.setAttribute('theme', validTheme);
+    }
+  }
+
+  private cleanup(): void {
+    if (this.client) {
+      this.client.cancelAllRequests();
     }
 
-    private updateTheme(theme: string | null): void {
-        // CSS custom properties via :host([theme]) selectors handle the actual theming
-        // This method is here for any additional theme-related logic if needed
-        const validTheme = theme === 'light' || theme === 'dark' || theme === 'auto' ? theme : 'auto';
-
-        // Ensure the attribute is set on the host for CSS selectors
-        if (validTheme === 'auto') {
-            // Let the @media (prefers-color-scheme) handle it
-            this.removeAttribute('theme');
-        } else {
-            this.setAttribute('theme', validTheme);
-        }
+    // Remove event listeners by cloning
+    if (this.inputElement) {
+      this.inputElement.replaceWith(this.inputElement.cloneNode(true));
     }
+  }
 
-    private cleanup(): void {
-        if (this.client) {
-            this.client.cancelAllRequests();
-        }
-
-        // Remove event listeners by cloning
-        if (this.inputElement) {
-            this.inputElement.replaceWith(this.inputElement.cloneNode(true));
-        }
-    }
-
-    // Public API
-    public async search(query: string): Promise<void> {
-        await this.performSearch(query);
-    }
+  // Public API
+  public async search(query: string): Promise<void> {
+    await this.performSearch(query);
+  }
 }
 
 // Register the custom element
 if (!customElements.get(COMPONENT_NAME)) {
-    customElements.define(COMPONENT_NAME, SearchBarSnippet);
+  customElements.define(COMPONENT_NAME, SearchBarSnippet);
 }

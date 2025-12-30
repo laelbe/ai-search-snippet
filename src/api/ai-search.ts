@@ -13,17 +13,24 @@ import type {
 import { Client } from './index.ts';
 
 export class AISearchClient extends Client {
-
-  private request(options: SearchOptions = {}, operation: 'ai-search' | 'search' | 'chat/completions', signal?: AbortSignal): Promise<Response> {
+  private request(
+    options: SearchOptions = {},
+    operation: 'ai-search' | 'search' | 'chat/completions',
+    signal?: AbortSignal
+  ): Promise<Response> {
     return fetch(`${this.baseUrl}/${operation}`, {
       method: 'POST',
-      body: JSON.stringify(operation === 'ai-search' || operation === 'search' ? {
-        query: options.query,
-        stream: options.streaming,
-      } : {
-        // model: 'workers-ai/@cf/meta/llama-3.3-70b-instruct-fp8-fast',
-        messages: [{ role: 'user', content: options.query }],
-      }),
+      body: JSON.stringify(
+        operation === 'ai-search' || operation === 'search'
+          ? {
+              query: options.query,
+              stream: options.streaming,
+            }
+          : {
+              // model: 'workers-ai/@cf/meta/llama-3.3-70b-instruct-fp8-fast',
+              messages: [{ role: 'user', content: options.query }],
+            }
+      ),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -68,30 +75,31 @@ export class AISearchClient extends Client {
         throw new Error('Response body is empty');
       }
       const result: {
-        success: boolean; result: {
+        success: boolean;
+        result: {
           data: {
-            file_id: string,
-            filename: string,
-            score: number,
+            file_id: string;
+            filename: string;
+            score: number;
             attributes: {
-              timestamp: number,
-              folder: string,
-              filename: string,
+              timestamp: number;
+              folder: string;
+              filename: string;
               file: {
-                description: string,
-                image: string,
-                title: string
-              }
-            },
+                description: string;
+                image: string;
+                title: string;
+              };
+            };
             content: [
               {
-                id: string,
-                type: string,
-                text: string,
-              }
-            ]
-          }[]
-        }
+                id: string;
+                type: string;
+                text: string;
+              },
+            ];
+          }[];
+        };
       } = await response.json();
       if (result.success && result.result) {
         return result.result.data.map((item) => ({
@@ -104,7 +112,7 @@ export class AISearchClient extends Client {
         }));
       }
       if (result.success === false) {
-        // @ts-ignore need to check this
+        // @ts-expect-error need to check this
         throw new Error(result.error);
       }
       throw new Error('Unknown error');
@@ -200,7 +208,7 @@ export class AISearchClient extends Client {
     if (!response.body) {
       throw new Error('Response body is empty');
     }
-    const result = await response.json() as {
+    const result = (await response.json()) as {
       choices: {
         message: {
           content: string;
