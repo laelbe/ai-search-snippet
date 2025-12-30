@@ -1,20 +1,34 @@
 name: Upload to R2
 
 on:
-  release:
-    types: [released]
+  workflow_run:
+    workflows: ["Create Release"]
+    types: [completed]
 
 jobs:
   upload:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.release.tag_name }}
+          ref: ${{ github.event.workflow_run.head_sha }}
+          fetch-depth: 0
+
+      - name: Resolve release tag
+        run: |
+          set -euo pipefail
+          git fetch --tags
+          SHA="${{ github.event.workflow_run.head_sha }}"
+          TAG="$(git tag --points-at "$SHA" | grep -E '^v' | head -n 1 || true)"
+          if [ -z "$TAG" ]; then
+            TAG="sha-${SHA:0:7}"
+          fi
+          echo "RELEASE_TAG=$TAG" >> "$GITHUB_ENV"
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -40,7 +54,6 @@ jobs:
           R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           R2_BUCKET: ${{ vars.R2_BUCKET }}
-          RELEASE_TAG: ${{ github.event.release.tag_name }}
         run: |
           set -euo pipefail
 
