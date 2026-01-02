@@ -21,7 +21,6 @@ export { SearchBarSnippet } from './components/search-bar-snippet.ts';
 export type {
   ApiError,
   ChatOptions,
-  ComponentMode,
   SearchOptions,
   SearchResult,
   SearchSnippetProps,
