@@ -322,6 +322,14 @@ export class ChatView {
   }
 
   /**
+   * Set messages (for restoring history)
+   */
+  public setMessages(messages: Message[]): void {
+    this.messages = [...messages];
+    this.renderMessages();
+  }
+
+  /**
    * Destroy and cleanup
    */
   public destroy(): void {
