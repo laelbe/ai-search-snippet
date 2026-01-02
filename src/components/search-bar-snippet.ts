@@ -6,14 +6,13 @@
 import type { Client } from '../api/index.ts';
 import { searchStyles } from '../styles/search.ts';
 import { baseStyles } from '../styles/theme.ts';
-import type { Clients, SearchResult, SearchSnippetProps } from '../types/index.ts';
+import type { SearchResult, SearchSnippetProps } from '../types/index.ts';
 import {
   createClient,
   createCustomEvent,
   debounce,
   escapeHTML,
   parseAttribute,
-  parseBooleanAttribute,
   parseNumberAttribute,
 } from '../utils/index.ts';
 
@@ -38,7 +37,6 @@ export class SearchBarSnippet extends HTMLElement {
       'max-results',
       'debounce-ms',
       'enable-streaming',
-      'client',
       'theme',
     ];
   }
@@ -61,7 +59,7 @@ export class SearchBarSnippet extends HTMLElement {
   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
     if (oldValue === newValue) return;
 
-    if (name === 'api-url' || name === 'client') {
+    if (name === 'api-url') {
       this.initializeClient();
     } else if (name === 'theme') {
       // Theme changes are handled automatically by CSS :host([theme]) selectors
@@ -73,14 +71,10 @@ export class SearchBarSnippet extends HTMLElement {
   private getProps(): SearchSnippetProps {
     return {
       apiUrl: parseAttribute(this.getAttribute('api-url'), 'http://localhost:3000'),
-      mode: 'search',
-      apiKey: this.getAttribute('api-key') || undefined,
       placeholder: parseAttribute(this.getAttribute('placeholder'), 'Search...'),
       maxResults: parseNumberAttribute(this.getAttribute('max-results'), 10),
       debounceMs: parseNumberAttribute(this.getAttribute('debounce-ms'), 300),
-      enableStreaming: parseBooleanAttribute(this.getAttribute('enable-streaming'), false),
       theme: parseAttribute(this.getAttribute('theme'), 'auto') as 'light' | 'dark' | 'auto',
-      client: parseAttribute(this.getAttribute('client'), 'nlweb') as Clients,
     };
   }
 
@@ -93,7 +87,7 @@ export class SearchBarSnippet extends HTMLElement {
     }
 
     try {
-      this.client = createClient(props.client, props.apiUrl);
+      this.client = createClient(props.apiUrl);
     } catch (error) {
       console.error('SearchBarSnippet:', error);
     }
@@ -199,68 +193,13 @@ export class SearchBarSnippet extends HTMLElement {
     this.isLoading = true;
     this.showLoadingState();
 
-    const results: SearchResult[] = [];
-    let hasError = false;
-
-    const props = this.getProps();
-    const streaming = props.enableStreaming;
-
-    if (streaming) {
-      try {
-        for await (const chunk of this.client.searchStream(query)) {
-          if (chunk.type === 'result') {
-            results.push(chunk);
-            this.displayResults(results, query);
-          } else if (chunk.type === 'error') {
-            hasError = true;
-            this.showErrorState(chunk.message || 'Unknown error');
-
-            // Emit error event
-            this.dispatchEvent(
-              createCustomEvent('error', {
-                error: {
-                  message: chunk.message || 'Unknown error',
-                  code: 'SEARCH_ERROR',
-                },
-              })
-            );
-            break;
-          }
-        }
-
-        // Emit search event with all results
-        if (!hasError) {
-          this.dispatchEvent(createCustomEvent('search', { query, results }));
-        }
-
-        // Show no results if we got none
-        if (results.length === 0 && !hasError) {
-          this.showNoResultsState(query);
-        }
-      } catch (error) {
-        this.showErrorState((error as Error).message);
-
-        // Emit error event
-        this.dispatchEvent(
-          createCustomEvent('error', {
-            error: {
-              message: (error as Error).message,
-              code: 'SEARCH_ERROR',
-            },
-          })
-        );
-      } finally {
-        this.isLoading = false;
-      }
-    } else {
-      try {
-        const results = await this.client.search(query, { streaming });
-        this.displayResults(results, query);
-      } catch (error) {
-        this.showErrorState((error as Error).message);
-      } finally {
-        this.isLoading = false;
-      }
+    try {
+      const results = await this.client.search(query, { streaming: false });
+      this.displayResults(results, query);
+    } catch (error) {
+      this.showErrorState((error as Error).message);
+    } finally {
+      this.isLoading = false;
     }
   }
 

@@ -6,12 +6,11 @@
 import type { Client } from '../api/index.ts';
 import { chatStyles } from '../styles/chat.ts';
 import { baseStyles } from '../styles/theme.ts';
-import type { Clients, SearchSnippetProps } from '../types/index.ts';
+import type { SearchSnippetProps } from '../types/index.ts';
 import {
   createClient,
   createCustomEvent,
   parseAttribute,
-  parseBooleanAttribute,
 } from '../utils/index.ts';
 import type { Message } from './chat-view.ts';
 import { ChatView } from './chat-view.ts';
@@ -26,7 +25,7 @@ export class ChatPageSnippet extends HTMLElement {
   private history: Message[] = [];
 
   static get observedAttributes(): string[] {
-    return ['api-url', 'api-key', 'placeholder', 'enable-streaming', 'client', 'theme'];
+    return ['api-url', 'placeholder', 'theme'];
   }
 
   constructor() {
@@ -50,7 +49,7 @@ export class ChatPageSnippet extends HTMLElement {
   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
     if (oldValue === newValue) return;
 
-    if (name === 'api-url' || name === 'client') {
+    if (name === 'api-url') {
       this.initializeClient();
       this.setupView();
     } else if (name === 'theme') {
@@ -62,12 +61,8 @@ export class ChatPageSnippet extends HTMLElement {
   private getProps(): SearchSnippetProps {
     return {
       apiUrl: parseAttribute(this.getAttribute('api-url'), 'http://localhost:3000'),
-      mode: 'chat',
-      apiKey: this.getAttribute('api-key') || undefined,
       placeholder: parseAttribute(this.getAttribute('placeholder'), 'Type a message...'),
-      enableStreaming: parseBooleanAttribute(this.getAttribute('enable-streaming'), true),
       theme: parseAttribute(this.getAttribute('theme'), 'auto') as 'light' | 'dark' | 'auto',
-      client: parseAttribute(this.getAttribute('client'), 'nlweb') as Clients,
     };
   }
 
@@ -80,7 +75,7 @@ export class ChatPageSnippet extends HTMLElement {
     }
 
     try {
-      this.client = createClient(props.client, props.apiUrl);
+      this.client = createClient(props.apiUrl);
     } catch (error) {
       console.error('ChatPageSnippet:', error);
     }

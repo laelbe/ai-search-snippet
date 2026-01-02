@@ -109,6 +109,7 @@ export const baseStyles = `
   --chat-bubble-button-bottom: 20px;
   --chat-bubble-button-right: 20px;
   --chat-bubble-button-z-index: 9999;
+  --chat-bubble-position: fixed;
 
 
 }

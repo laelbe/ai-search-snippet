@@ -4,8 +4,6 @@
 
 import { AISearchClient } from '../api/ai-search.ts';
 import type { Client } from '../api/index.ts';
-import { NLWebClient } from '../api/nlweb-client.ts';
-import type { Clients } from '../types/index.ts';
 
 /**
  * Debounce function to limit API calls
@@ -117,20 +115,12 @@ export function createCustomEvent<T>(name: string, detail: T): CustomEvent<T> {
 }
 
 /**
- * Create API client based on type
+ * Create API client
  */
-export function createClient(clientType: Clients, apiUrl: string): Client {
+export function createClient(apiUrl: string): Client {
   if (!apiUrl) {
     throw new Error('API URL is required');
   }
 
-  if (clientType === 'nlweb') {
-    return new NLWebClient(apiUrl);
-  }
-
-  if (clientType === 'ai-search') {
-    return new AISearchClient(apiUrl);
-  }
-
-  throw new Error(`Invalid client type: ${clientType}`);
+  return new AISearchClient(apiUrl);
 }

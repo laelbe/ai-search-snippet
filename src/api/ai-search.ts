@@ -53,15 +53,6 @@ export class AISearchClient extends Client {
         {
           query,
           streaming: false,
-          generate_mode: options.generate_mode,
-          site: options.site,
-          prev: options.prev,
-          last_ans: options.last_ans,
-          item_to_remember: options.item_to_remember,
-          model: options.model,
-          oauth_id: options.oauth_id,
-          thread_id: options.thread_id,
-          display_mode: options.display_mode,
         } satisfies SearchOptions,
         'search',
         signal
@@ -135,15 +126,6 @@ export class AISearchClient extends Client {
       {
         query,
         streaming: true,
-        generate_mode: options?.generate_mode,
-        site: options?.site,
-        prev: options?.prev,
-        last_ans: options?.last_ans,
-        item_to_remember: options?.item_to_remember,
-        model: options?.model,
-        oauth_id: options?.oauth_id,
-        thread_id: options?.thread_id,
-        display_mode: options?.display_mode,
       } satisfies SearchOptions,
       'ai-search',
       signal

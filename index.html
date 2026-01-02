@@ -4,56 +4,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search & Chat Snippets - Modern Web Components</title>
+    <title>AI Search Components - The Platform for Building Search</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <style>
         :root {
-            /* Light mode colors */
-            --bg-primary: #fafafa;
-            --bg-secondary: #ffffff;
-            --bg-surface: #f5f5f5;
-            --bg-gradient: #F6821F;
-            --text-primary: #171717;
-            --text-secondary: #525252;
-            --text-muted: #a3a3a3;
-            --border-color: #e5e5e5;
-            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-            --code-bg: #262626;
-            --code-text: #e5e5e5;
-            --accent-primary: #F6821F;
-            --accent-secondary: #FBAD41;
-            --accent-gradient: #F6821F;
-            --glass-bg: rgba(255, 255, 255, 0.8);
-            --glass-border: rgba(255, 255, 255, 0.2);
-        }
-
-        [data-theme="dark"] {
-            /* Dark mode colors */
-            --bg-primary: #0a0a0a;
-            --bg-secondary: #171717;
-            --bg-surface: #262626;
-            --bg-gradient: #F6821F;
-            --text-primary: #fafafa;
-            --text-secondary: #d4d4d4;
-            --text-muted: #737373;
-            --border-color: #262626;
-            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
-            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.3);
-            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.3);
-            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.4), 0 8px 10px -6px rgb(0 0 0 / 0.3);
+            --bg-primary: #0d0d0d;
+            --bg-secondary: #141414;
+            --bg-surface: #1a1a1a;
+            --bg-elevated: #222222;
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1a1;
+            --text-muted: #666666;
+            --border-color: #2a2a2a;
+            --border-light: #333333;
+            --accent-orange: #F6821F;
+            --accent-amber: #FBAD41;
+            --accent-gradient: linear-gradient(135deg, #F6821F 0%, #FBAD41 100%);
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.5);
+            --shadow-xl: 0 24px 60px rgba(0, 0, 0, 0.6);
+            --shadow-glow: 0 0 60px rgba(246, 130, 31, 0.15);
             --code-bg: #0a0a0a;
             --code-text: #e5e5e5;
-            --accent-primary: #FBAD41;
-            --accent-secondary: #F6821F;
-            --accent-gradient: #F6821F;
-            --glass-bg: rgba(23, 23, 23, 0.8);
-            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9f9f9;
+            --bg-surface: #f3f3f3;
+            --bg-elevated: #ffffff;
+            --text-primary: #0d0d0d;
+            --text-secondary: #525252;
+            --text-muted: #a1a1a1;
+            --border-color: #e5e5e5;
+            --border-light: #d4d4d4;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 24px 60px rgba(0, 0, 0, 0.12);
+            --shadow-glow: 0 0 60px rgba(246, 130, 31, 0.1);
+            --code-bg: #1a1a1a;
+            --code-text: #e5e5e5;
         }
 
         * {
@@ -62,19 +57,162 @@
             padding: 0;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
             background: var(--bg-primary);
             min-height: 100vh;
             color: var(--text-primary);
-            transition: background-color 0.3s ease, color 0.3s ease;
             line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 16px 24px;
+            background: rgba(13, 13, 13, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        [data-theme="light"] .nav {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-surface);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-right: 12px;
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--accent-orange);
+            color: var(--text-primary);
+        }
+
+        .theme-toggle i {
+            font-size: 18px;
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .nav-logo-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--accent-gradient);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .nav-logo-text {
+            font-weight: 700;
+            font-size: 18px;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-cta {
+            display: flex;
+            align-items: center;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--accent-gradient);
+            color: white;
+            box-shadow: 0 4px 16px rgba(246, 130, 31, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(246, 130, 31, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border-light);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-surface);
+            border-color: var(--text-muted);
         }
 
         /* Hero Section */
         .hero {
-            background: var(--bg-gradient);
-            padding: 80px 20px 120px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 140px 24px 80px;
             position: relative;
             overflow: hidden;
         }
@@ -83,16 +221,30 @@
             content: '';
             position: absolute;
             top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 1200px;
+            height: 600px;
+            background: radial-gradient(ellipse at center top, rgba(246, 130, 31, 0.12) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            background:
+                radial-gradient(circle at 20% 80%, rgba(251, 173, 65, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 80% 20%, rgba(246, 130, 31, 0.05) 0%, transparent 40%);
             pointer-events: none;
         }
 
         .hero-content {
             max-width: 900px;
-            margin: 0 auto;
             text-align: center;
             position: relative;
             z-index: 1;
@@ -102,139 +254,90 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
             border-radius: 100px;
-            padding: 8px 16px;
+            padding: 8px 16px 8px 10px;
             font-size: 13px;
             font-weight: 500;
-            color: white;
-            margin-bottom: 24px;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
         }
 
-        .hero-badge-dot {
-            width: 8px;
-            height: 8px;
-            background: #34d399;
+        .hero-badge-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--accent-gradient);
             border-radius: 50%;
-            animation: pulse-dot 2s infinite;
-        }
-
-        @keyframes pulse-dot {
-
-            0%,
-            100% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0.5;
-            }
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: white;
         }
 
         .hero h1 {
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            font-weight: 700;
-            color: white;
-            margin-bottom: 16px;
-            letter-spacing: -0.02em;
+            font-size: clamp(3rem, 8vw, 5rem);
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 24px;
+            letter-spacing: -0.03em;
+            line-height: 1.05;
         }
 
-        .hero p {
-            font-size: 1.25rem;
-            color: rgba(255, 255, 255, 0.85);
-            max-width: 600px;
-            margin: 0 auto 32px;
+        .hero h1 .highlight {
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2vw, 1.35rem);
+            color: var(--text-secondary);
+            max-width: 680px;
+            margin: 0 auto 40px;
+            line-height: 1.7;
         }
 
         .hero-actions {
             display: flex;
-            gap: 12px;
+            gap: 16px;
             justify-content: center;
             flex-wrap: wrap;
         }
 
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 24px;
-            border-radius: 10px;
+        .hero-actions .btn {
+            padding: 16px 32px;
             font-size: 15px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.2s ease;
-            cursor: pointer;
-            border: none;
-        }
-
-        .btn-primary {
-            background: white;
-            color: #F6821F;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        /* Theme Toggle */
-        .theme-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 10px 16px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--text-primary);
-            transition: all 0.2s ease;
-            box-shadow: var(--shadow);
-        }
-
-        .theme-toggle:hover {
-            transform: scale(1.05);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .theme-icon {
-            font-size: 18px;
         }
 
         /* Main Container */
         .container {
-            max-width: 1280px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 24px;
         }
 
         /* Section Styles */
         .section {
-            padding: 80px 0;
+            padding: 100px 0;
+            position: relative;
+        }
+
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--border-color), transparent);
         }
 
         .section-header {
             text-align: center;
-            margin-bottom: 48px;
+            margin-bottom: 64px;
         }
 
         .section-label {
@@ -243,20 +346,20 @@
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.1em;
-            color: var(--accent-primary);
-            margin-bottom: 12px;
+            color: var(--accent-orange);
+            margin-bottom: 16px;
         }
 
         .section-title {
-            font-size: clamp(1.75rem, 3vw, 2.5rem);
-            font-weight: 700;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
             color: var(--text-primary);
             margin-bottom: 16px;
-            letter-spacing: -0.02em;
+            letter-spacing: -0.03em;
         }
 
         .section-description {
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             color: var(--text-secondary);
             max-width: 600px;
             margin: 0 auto;
@@ -265,67 +368,85 @@
         /* Demo Cards */
         .demo-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            grid-template-columns: repeat(2, 1fr);
             gap: 24px;
-            margin-top: -80px;
-            position: relative;
-            z-index: 10;
         }
 
         .demo-card {
             background: var(--bg-secondary);
             border-radius: 20px;
-            padding: 28px;
-            box-shadow: var(--shadow-xl);
+            padding: 32px;
             border: 1px solid var(--border-color);
             transition: all 0.3s ease;
         }
 
         .demo-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-xl);
+            border-color: var(--border-light);
+            box-shadow: var(--shadow-glow);
         }
 
         .demo-card-header {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 16px;
             margin-bottom: 16px;
         }
 
         .demo-card-icon {
-            width: 44px;
-            height: 44px;
+            width: 48px;
+            height: 48px;
             border-radius: 12px;
             background: var(--accent-gradient);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: 22px;
+            color: white;
         }
 
         .demo-card h2 {
-            font-size: 1.25rem;
-            font-weight: 600;
+            font-size: 1.35rem;
+            font-weight: 700;
             color: var(--text-primary);
+            letter-spacing: -0.02em;
         }
 
-        .demo-card p {
+        .demo-card>p {
             color: var(--text-secondary);
             font-size: 0.95rem;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
+            line-height: 1.6;
         }
 
-        /* Custom theme for demo widgets */
         chat-bubble-snippet {
             --search-snippet-primary-color: #F6821F;
             --search-snippet-primary-hover: #FBAD41;
         }
 
+        chat-page-snippet {
+            height: 400px;
+        }
+
+        .chat-bubble-demo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 120px;
+            position: relative;
+            width: 100%;
+        }
+
+        .chat-bubble-inline {
+            --chat-bubble-position: absolute;
+            --chat-bubble-button-bottom: 0;
+            --chat-bubble-button-right: 0;
+            --chat-bubble-button-z-index: 1;
+        }
+
         /* Features Grid */
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(4, 1fr);
             gap: 20px;
         }
 
@@ -333,14 +454,13 @@
             background: var(--bg-secondary);
             border: 1px solid var(--border-color);
             border-radius: 16px;
-            padding: 24px;
+            padding: 28px;
             transition: all 0.3s ease;
         }
 
         .feature-card:hover {
+            border-color: var(--border-light);
             transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-            border-color: var(--accent-primary);
         }
 
         .feature-icon {
@@ -348,23 +468,26 @@
             height: 48px;
             border-radius: 12px;
             background: var(--bg-surface);
+            border: 1px solid var(--border-color);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
-            margin-bottom: 16px;
+            font-size: 22px;
+            color: var(--accent-orange);
+            margin-bottom: 20px;
         }
 
         .feature-card h3 {
-            font-size: 1.1rem;
-            font-weight: 600;
+            font-size: 1rem;
+            font-weight: 700;
             color: var(--text-primary);
             margin-bottom: 8px;
         }
 
         .feature-card p {
             color: var(--text-secondary);
-            font-size: 0.9rem;
+            font-size: 0.875rem;
+            line-height: 1.5;
         }
 
         /* Configurator Styles */
@@ -372,13 +495,7 @@
             background: var(--bg-secondary);
             border-radius: 24px;
             padding: 40px;
-            box-shadow: var(--shadow-lg);
             border: 1px solid var(--border-color);
-        }
-
-        .configurator-header {
-            text-align: center;
-            margin-bottom: 32px;
         }
 
         .config-tabs {
@@ -387,21 +504,21 @@
             margin-bottom: 32px;
             background: var(--bg-surface);
             padding: 6px;
-            border-radius: 14px;
+            border-radius: 12px;
             width: fit-content;
             margin-left: auto;
             margin-right: auto;
         }
 
         .config-tab {
-            padding: 10px 20px;
+            padding: 10px 24px;
             border: none;
             background: transparent;
             cursor: pointer;
             font-size: 14px;
-            font-weight: 500;
+            font-weight: 600;
             color: var(--text-secondary);
-            border-radius: 10px;
+            border-radius: 8px;
             transition: all 0.2s ease;
         }
 
@@ -410,9 +527,8 @@
         }
 
         .config-tab.active {
-            background: var(--bg-secondary);
-            color: var(--accent-primary);
-            box-shadow: var(--shadow-sm);
+            background: var(--accent-gradient);
+            color: white;
         }
 
         .config-content {
@@ -428,6 +544,7 @@
             padding: 24px;
             overflow-y: auto;
             max-height: 800px;
+            border: 1px solid var(--border-color);
         }
 
         .config-panel::-webkit-scrollbar {
@@ -445,7 +562,7 @@
 
         .config-actions {
             display: flex;
-            gap: 10px;
+            gap: 12px;
             margin-bottom: 24px;
         }
 
@@ -460,12 +577,16 @@
             font-size: 13px;
             font-weight: 600;
             transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
         .config-btn:hover {
-            background: var(--accent-primary);
+            background: var(--accent-orange);
             color: white;
-            border-color: var(--accent-primary);
+            border-color: var(--accent-orange);
         }
 
         .config-section {
@@ -476,7 +597,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 700;
             margin-bottom: 16px;
             color: var(--text-primary);
@@ -507,7 +628,7 @@
         }
 
         .config-category-label {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
             text-transform: uppercase;
             color: var(--text-muted);
@@ -538,7 +659,7 @@
         }
 
         .config-item:hover {
-            border-color: var(--accent-primary);
+            border-color: var(--accent-orange);
         }
 
         .config-label {
@@ -578,8 +699,8 @@
         .config-input:focus,
         .config-select:focus {
             outline: none;
-            border-color: var(--accent-primary);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+            border-color: var(--accent-orange);
+            box-shadow: 0 0 0 3px rgba(246, 130, 31, 0.1);
         }
 
         .config-input[type="color"] {
@@ -621,13 +742,13 @@
         }
 
         .theme-mode-btn:hover {
-            border-color: var(--accent-primary);
+            border-color: var(--accent-orange);
             color: var(--text-primary);
         }
 
         .theme-mode-btn.active {
-            background: var(--accent-primary);
-            border-color: var(--accent-primary);
+            background: var(--accent-gradient);
+            border-color: var(--accent-orange);
             color: white;
         }
 
@@ -638,7 +759,7 @@
         .theme-indicator {
             font-size: 9px;
             font-weight: 500;
-            color: var(--accent-primary);
+            color: var(--accent-orange);
             text-transform: uppercase;
         }
 
@@ -652,7 +773,7 @@
             width: 20px;
             height: 20px;
             cursor: pointer;
-            accent-color: var(--accent-primary);
+            accent-color: var(--accent-orange);
         }
 
         .preview-panel {
@@ -666,6 +787,7 @@
             border-radius: 16px;
             padding: 24px;
             flex: 1;
+            border: 1px solid var(--border-color);
         }
 
         .preview-title {
@@ -689,12 +811,14 @@
             display: flex;
             align-items: flex-start;
             justify-content: center;
+            position: relative;
         }
 
         .code-section {
             background: var(--code-bg);
             border-radius: 16px;
             padding: 24px;
+            border: 1px solid var(--border-color);
         }
 
         .code-section .preview-title {
@@ -736,9 +860,12 @@
 
         .code-example h2 {
             font-size: 1.5rem;
-            font-weight: 600;
+            font-weight: 700;
             color: var(--text-primary);
             margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
         pre {
@@ -749,6 +876,7 @@
             overflow-x: auto;
             font-size: 13px;
             line-height: 1.7;
+            border: 1px solid var(--border-color);
         }
 
         code {
@@ -758,13 +886,59 @@
         /* Footer */
         .footer {
             text-align: center;
-            color: var(--text-muted);
-            padding: 40px 20px;
+            padding: 60px 24px;
             border-top: 1px solid var(--border-color);
         }
 
-        .footer p {
+        .footer-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .footer-cta {
+            margin-bottom: 40px;
+        }
+
+        .footer-cta h3 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+
+        .footer-cta p {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .footer-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+
+        .footer-link {
+            color: var(--text-secondary);
+            text-decoration: none;
             font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .footer-link:hover {
+            color: var(--text-primary);
+        }
+
+        .footer-copyright {
+            color: var(--text-muted);
+            font-size: 13px;
         }
 
         /* Responsive */
@@ -776,20 +950,31 @@
             .config-panel {
                 max-height: none;
             }
+
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
         @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
             .hero {
-                padding: 60px 20px 100px;
+                padding: 120px 20px 60px;
             }
 
             .demo-grid {
                 grid-template-columns: 1fr;
-                margin-top: -60px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
             }
 
             .hero h1 {
-                font-size: 2rem;
+                font-size: 2.5rem;
             }
 
             .hero-actions {
@@ -804,6 +989,10 @@
             .config-tabs {
                 flex-wrap: wrap;
                 justify-content: center;
+            }
+
+            .footer-actions {
+                flex-direction: column;
             }
         }
 
@@ -827,39 +1016,84 @@
         .demo-card:nth-child(2) {
             animation-delay: 0.1s;
         }
+
+        .feature-card {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .feature-card:nth-child(2) {
+            animation-delay: 0.05s;
+        }
+
+        .feature-card:nth-child(3) {
+            animation-delay: 0.1s;
+        }
+
+        .feature-card:nth-child(4) {
+            animation-delay: 0.15s;
+        }
+
+        .feature-card:nth-child(5) {
+            animation-delay: 0.2s;
+        }
+
+        .feature-card:nth-child(6) {
+            animation-delay: 0.25s;
+        }
+
+        .feature-card:nth-child(7) {
+            animation-delay: 0.3s;
+        }
+
+        .feature-card:nth-child(8) {
+            animation-delay: 0.35s;
+        }
     </style>
 </head>
 
 <body>
-    <!-- Theme Toggle (Fixed) -->
-    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-        <span class="theme-icon" id="themeIcon"><i class="ph ph-moon"></i></span>
-        <span id="themeText">Dark</span>
-    </button>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-content">
+            <a href="#" class="nav-logo">
+                <div class="nav-logo-icon">
+                    <i class="ph ph-magnifying-glass"></i>
+                </div>
+                <span class="nav-logo-text">AI Search</span>
+            </a>
+            <div class="nav-links">
+                <a href="#demos" class="nav-link">Components</a>
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#configurator" class="nav-link">Configurator</a>
+                <a href="#quick-start" class="nav-link">Docs</a>
+            </div>
+            <div class="nav-cta">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                    <i class="ph ph-moon" id="themeIcon"></i>
+                </button>
+                <a href="#quick-start" class="btn btn-primary">Get Started</a>
+            </div>
+        </div>
+    </nav>
 
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-content">
             <div class="hero-badge">
-                <span class="hero-badge-dot"></span>
-                Production Ready
+                <span class="hero-badge-icon"><i class="ph ph-sparkle"></i></span>
+                Production Ready Components
             </div>
-            <h1>Search & Chat Web Components</h1>
-            <p>Beautiful, customizable, and accessible search and chat components for your website. Zero dependencies,
-                framework agnostic.</p>
+            <h1>The Platform for<br><span class="highlight">Building Search.</span></h1>
+            <p class="hero-subtitle">Beautiful, customizable search and chat components for your website.
+                Zero dependencies, framework agnostic, and built for the modern web.</p>
             <div class="hero-actions">
-                <a href="#configurator" class="btn btn-primary">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 3v18M3 12h18" />
-                    </svg>
-                    Try Configurator
+                <a href="#quick-start" class="btn btn-primary">
+                    Get Started
+                    <i class="ph ph-arrow-right"></i>
                 </a>
-                <a href="#quick-start" class="btn btn-secondary">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-                    </svg>
-                    Documentation
+                <a href="#configurator" class="btn btn-secondary">
+                    <i class="ph ph-sliders-horizontal"></i>
+                    Try Configurator
                 </a>
             </div>
         </div>
@@ -867,38 +1101,54 @@
 
     <!-- Demo Section -->
     <div class="container">
-        <div class="demo-grid">
-            <div class="demo-card">
-                <div class="demo-card-header">
-                    <div class="demo-card-icon"><i class="ph ph-magnifying-glass"></i></div>
-                    <h2>Search Bar</h2>
-                </div>
-                <p>Inline search widget with real-time results. Perfect for embedding search functionality anywhere on
-                    your page.</p>
-                <search-bar-snippet api-url="https://docs-website-nlweb.developer-docs-autorag.workers.dev/"
-                    placeholder="Search for information..." max-results="5" debounce-ms="300" client="nlweb">
-                </search-bar-snippet>
+        <section class="section" id="demos">
+            <div class="section-header">
+                <span class="section-label">Live Demos</span>
+                <h2 class="section-title">Try Our Components</h2>
+                <p class="section-description">Interactive demos of our search and chat components.
+                    Click the chat bubble in the bottom right to try the floating widget.</p>
             </div>
-            <div class="demo-card">
-                <div class="demo-card-header">
-                    <div class="demo-card-icon"><i class="ph ph-chat-circle-text"></i></div>
-                    <h2>Full Page Chat</h2>
+            <div class="demo-grid">
+                <div class="demo-card">
+                    <div class="demo-card-header">
+                        <div class="demo-card-icon"><i class="ph ph-magnifying-glass"></i></div>
+                        <h2>Search Bar</h2>
+                    </div>
+                    <p>Inline search widget with real-time results. Perfect for embedding search functionality anywhere
+                        on your page.</p>
+                    <search-bar-snippet api-url="https://docs-website-nlweb.developer-docs-autorag.workers.dev/"
+                        placeholder="Search for information..." max-results="5" debounce-ms="300">
+                    </search-bar-snippet>
                 </div>
-                <p>Full-featured chat interface with streaming responses. Ideal for dedicated chat pages or support
-                    sections.</p>
-                <chat-page-snippet api-url="https://docs-website-nlweb.developer-docs-autorag.workers.dev/"
-                    placeholder="Ask me anything..." max-results="5" debounce-ms="300" client="nlweb">
-                </chat-page-snippet>
+                <div class="demo-card">
+                    <div class="demo-card-header">
+                        <div class="demo-card-icon"><i class="ph ph-chat-circle-text"></i></div>
+                        <h2>Full Page Chat</h2>
+                    </div>
+                    <p>Full-featured chat interface with streaming responses. Ideal for dedicated chat pages or support
+                        sections.</p>
+                    <chat-page-snippet api-url="https://docs-website-nlweb.developer-docs-autorag.workers.dev/"
+                        placeholder="Ask me anything...">
+                    </chat-page-snippet>
+                </div>
+                <div class="demo-card">
+                    <div class="demo-card-header">
+                        <div class="demo-card-icon"><i class="ph ph-chat-circle"></i></div>
+                        <h2>Chat Bubble</h2>
+                    </div>
+                    <p>Floating chat widget that expands from a bubble button. Perfect for adding support chat without
+                        taking up page space.</p>
+                    <div class="chat-bubble-demo-container">
+                        <chat-bubble-snippet api-url="https://docs-website-nlweb.developer-docs-autorag.workers.dev/"
+                            placeholder="Ask me anything..." class="chat-bubble-inline">
+                        </chat-bubble-snippet>
+                    </div>
+                </div>
             </div>
-        </div>
-
-        <!-- Chat Bubble Widget (Fixed Position) -->
-        <chat-bubble-snippet api-url="https://docs-website-nlweb.developer-docs-autorag.workers.dev/"
-            placeholder="Ask me anything..." enable-streaming="true" client="nlweb" theme="light">
-        </chat-bubble-snippet>
+        </section>
 
         <!-- Features Section -->
-        <section class="section">
+        <section class="section" id="features">
             <div class="section-header">
                 <span class="section-label">Why Choose Us</span>
                 <h2 class="section-title">Built for Modern Web Development</h2>
@@ -924,22 +1174,22 @@
                 <div class="feature-card">
                     <div class="feature-icon"><i class="ph ph-puzzle-piece"></i></div>
                     <h3>Framework Agnostic</h3>
-                    <p>Native Web Components work with React, Vue, Angular, or vanilla JS.</p>
+                    <p>Works with React, Vue, Angular, or vanilla JS.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon"><i class="ph ph-wheelchair"></i></div>
                     <h3>Accessible</h3>
-                    <p>WCAG 2.1 AA compliant with full keyboard and screen reader support.</p>
+                    <p>WCAG 2.1 AA compliant with full keyboard support.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon"><i class="ph ph-rocket-launch"></i></div>
                     <h3>Streaming Support</h3>
-                    <p>Real-time streaming responses for a natural chat experience.</p>
+                    <p>Real-time streaming for a natural chat experience.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon"><i class="ph ph-moon-stars"></i></div>
                     <h3>Dark Mode</h3>
-                    <p>Automatic theme switching based on system preferences or manual control.</p>
+                    <p>Automatic theme switching based on system preferences.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon"><i class="ph ph-package"></i></div>
@@ -1065,8 +1315,30 @@
 
         <!-- Footer -->
         <footer class="footer">
-            <p>Built with TypeScript, Web Components, and <i class="ph ph-heart-fill"
-                    style="color: var(--accent-primary);"></i></p>
+            <div class="footer-content">
+                <div class="footer-cta">
+                    <h3>Get started today.</h3>
+                    <p>Add powerful AI search to your website in minutes.</p>
+                    <div class="footer-actions">
+                        <a href="#quick-start" class="btn btn-primary">
+                            Get Started
+                            <i class="ph ph-arrow-right"></i>
+                        </a>
+                        <a href="https://github.com" class="btn btn-secondary" target="_blank">
+                            <i class="ph ph-github-logo"></i>
+                            View on GitHub
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <a href="#demos" class="footer-link">Components</a>
+                    <a href="#features" class="footer-link">Features</a>
+                    <a href="#configurator" class="footer-link">Configurator</a>
+                    <a href="#quick-start" class="footer-link">Documentation</a>
+                </div>
+                <p class="footer-copyright">Built with TypeScript, Web Components, and <i class="ph ph-heart-fill"
+                        style="color: var(--accent-orange);"></i></p>
+            </div>
         </footer>
     </div>
 
@@ -1075,35 +1347,33 @@
 
     <!-- Theme Toggle Script -->
     <script>
-        // Theme management
         const themeToggle = document.getElementById('themeToggle');
         const themeIcon = document.getElementById('themeIcon');
-        const themeText = document.getElementById('themeText');
         const html = document.documentElement;
 
-        // Get saved theme or default to light
-        const savedTheme = localStorage.getItem('theme') || 'light';
+        // Get saved theme or default to dark
+        const savedTheme = localStorage.getItem('theme') || 'dark';
 
-        // Apply theme on load
         function applyTheme(theme) {
-            if (theme === 'dark') {
-                html.setAttribute('data-theme', 'dark');
-                themeIcon.innerHTML = '<i class="ph ph-sun"></i>';
-                themeText.textContent = 'Light';
+            if (theme === 'light') {
+                html.setAttribute('data-theme', 'light');
+                themeIcon.className = 'ph ph-sun';
             } else {
                 html.removeAttribute('data-theme');
-                themeIcon.innerHTML = '<i class="ph ph-moon"></i>';
-                themeText.textContent = 'Dark';
+                themeIcon.className = 'ph ph-moon';
+            }
+            // Update chat bubble theme
+            const chatBubble = document.querySelector('chat-bubble-snippet');
+            if (chatBubble) {
+                chatBubble.setAttribute('theme', theme);
             }
         }
 
-        // Initialize theme
         applyTheme(savedTheme);
 
-        // Toggle theme
         themeToggle.addEventListener('click', () => {
             const currentTheme = html.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
             applyTheme(newTheme);
             localStorage.setItem('theme', newTheme);
         });
@@ -1113,12 +1383,9 @@
     <script>
         const PROP_CONFIGS = [
             { name: 'api-url', type: 'text', defaultValue: 'https://docs-website-nlweb.developer-docs-autorag.workers.dev/', description: 'API endpoint URL', appliesTo: ['search-bar', 'chat-bubble', 'chat-page'] },
-            { name: 'api-key', type: 'text', defaultValue: '', description: 'Optional API key', appliesTo: ['search-bar', 'chat-bubble', 'chat-page'] },
             { name: 'placeholder', type: 'text', defaultValue: 'Type a message...', description: 'Input placeholder text', appliesTo: ['search-bar', 'chat-bubble', 'chat-page'] },
             { name: 'max-results', type: 'number', defaultValue: 10, description: 'Maximum number of results', appliesTo: ['search-bar'] },
             { name: 'debounce-ms', type: 'number', defaultValue: 300, description: 'Debounce delay in milliseconds', appliesTo: ['search-bar'] },
-            { name: 'enable-streaming', type: 'boolean', defaultValue: true, description: 'Enable streaming responses', appliesTo: ['search-bar', 'chat-bubble', 'chat-page'] },
-            { name: 'client', type: 'select', options: ['nlweb', 'ai-search'], defaultValue: 'nlweb', description: 'API client type', appliesTo: ['search-bar', 'chat-bubble', 'chat-page'] },
             { name: 'theme', type: 'select', options: ['light', 'dark', 'auto'], defaultValue: 'auto', description: 'Color theme', appliesTo: ['search-bar', 'chat-bubble', 'chat-page'] }
         ];
 
@@ -1376,6 +1643,9 @@
 
             const tag = `${currentSnippet}-snippet`;
             const el = document.createElement(tag);
+            if (currentSnippet === 'chat-bubble') {
+                el.setAttribute('class', 'chat-bubble-inline');
+            }
 
             // Apply props
             PROP_CONFIGS.forEach(p => {

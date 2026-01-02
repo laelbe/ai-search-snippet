@@ -10,7 +10,7 @@
  */
 
 // Export API client for advanced usage
-export { NLWebClient } from './api/nlweb-client.ts';
+export { AISearchClient } from './api/ai-search.ts';
 
 // Export all snippet components
 export { ChatBubbleSnippet } from './components/chat-bubble-snippet.ts';

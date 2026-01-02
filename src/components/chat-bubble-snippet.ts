@@ -7,13 +7,8 @@
 import type { Client } from '../api/index.ts';
 import { chatStyles } from '../styles/chat.ts';
 import { baseStyles } from '../styles/theme.ts';
-import type { Clients, SearchSnippetProps } from '../types/index.ts';
-import {
-  createClient,
-  createCustomEvent,
-  parseAttribute,
-  parseBooleanAttribute,
-} from '../utils/index.ts';
+import type { SearchSnippetProps } from '../types/index.ts';
+import { createClient, createCustomEvent, parseAttribute } from '../utils/index.ts';
 import type { Message } from './chat-view.ts';
 import { ChatView } from './chat-view.ts';
 
@@ -28,7 +23,7 @@ export class ChatBubbleSnippet extends HTMLElement {
   private isMinimized = false;
 
   static get observedAttributes(): string[] {
-    return ['api-url', 'api-key', 'placeholder', 'enable-streaming', 'client', 'theme'];
+    return ['api-url', 'placeholder', 'theme'];
   }
 
   constructor() {
@@ -49,7 +44,7 @@ export class ChatBubbleSnippet extends HTMLElement {
   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
     if (oldValue === newValue) return;
 
-    if (name === 'api-url' || name === 'client') {
+    if (name === 'api-url') {
       this.initializeClient();
     } else if (name === 'theme') {
       // Theme changes are handled automatically by CSS :host([theme]) selectors
@@ -60,12 +55,8 @@ export class ChatBubbleSnippet extends HTMLElement {
   private getProps(): SearchSnippetProps {
     return {
       apiUrl: parseAttribute(this.getAttribute('api-url'), 'http://localhost:3000'),
-      mode: 'chat',
-      apiKey: this.getAttribute('api-key') || undefined,
       placeholder: parseAttribute(this.getAttribute('placeholder'), 'Type a message...'),
-      enableStreaming: parseBooleanAttribute(this.getAttribute('enable-streaming'), true),
       theme: parseAttribute(this.getAttribute('theme'), 'auto') as 'light' | 'dark' | 'auto',
-      client: parseAttribute(this.getAttribute('client'), 'nlweb') as Clients,
     };
   }
 
@@ -78,7 +69,7 @@ export class ChatBubbleSnippet extends HTMLElement {
     }
 
     try {
-      this.client = createClient(props.client, props.apiUrl);
+      this.client = createClient(props.apiUrl);
     } catch (error) {
       console.error('ChatBubbleSnippet:', error);
     }
@@ -102,7 +93,7 @@ export class ChatBubbleSnippet extends HTMLElement {
   private getBubbleStyles(): string {
     return `
       .chat-bubble-widget {
-        position: fixed;
+        position: var(--chat-bubble-position);
         bottom: var(--chat-bubble-button-bottom);
         right: var(--chat-bubble-button-right);
         z-index: var(--chat-bubble-button-z-index);
@@ -257,6 +248,12 @@ export class ChatBubbleSnippet extends HTMLElement {
             <span>Chat</span>
           </div>
           <div class="chat-header-actions">
+            <button class="icon-button clear-button" aria-label="Clear history">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              </svg>
+            </button>
             <button class="icon-button minimize-button" aria-label="Minimize">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -279,10 +276,12 @@ export class ChatBubbleSnippet extends HTMLElement {
     const bubbleButton = this.shadow.querySelector('.bubble-button');
     const closeButton = this.shadow.querySelector('.close-button');
     const minimizeButton = this.shadow.querySelector('.minimize-button');
+    const clearButton = this.shadow.querySelector('.clear-button');
 
     bubbleButton?.addEventListener('click', () => this.toggleChat());
     closeButton?.addEventListener('click', () => this.closeChat());
     minimizeButton?.addEventListener('click', () => this.toggleMinimize());
+    clearButton?.addEventListener('click', () => this.clearChat());
   }
 
   private toggleChat(): void {
