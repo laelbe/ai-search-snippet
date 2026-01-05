@@ -174,7 +174,7 @@ export class SearchBarSnippet extends HTMLElement {
         this.inputElement.value = '';
       }
     };
-    this.inputElement.addEventListener('keydown', this.handleInputKeydownEscape);
+    window.addEventListener('keydown', this.handleInputKeydownEscape);
 
     // Search button click
     if (this.searchButton) {
@@ -342,7 +342,7 @@ export class SearchBarSnippet extends HTMLElement {
         this.inputElement.removeEventListener('keydown', this.handleInputKeydownEnter);
       }
       if (this.handleInputKeydownEscape) {
-        this.inputElement.removeEventListener('keydown', this.handleInputKeydownEscape);
+        window.removeEventListener('keydown', this.handleInputKeydownEscape);
       }
     }
 

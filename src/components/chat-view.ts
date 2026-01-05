@@ -62,6 +62,7 @@ export class ChatView {
               class="chat-input"
               placeholder="${escapeHTML(this.props.placeholder || 'Type a message...')}"
               aria-label="Chat message input"
+              style="height: 40px;"
               rows="1"
             ></textarea>
             <button class="button chat-send-button" aria-label="Send message">
