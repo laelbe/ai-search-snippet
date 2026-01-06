@@ -420,7 +420,8 @@
 
         chat-bubble-snippet,
         chat-page-snippet,
-        search-bar-snippet {
+        search-bar-snippet,
+        search-modal-snippet {
             --search-snippet-primary-color: #F6821F;
             --search-snippet-primary-hover: #FBAD41;
             --search-snippet-focus-ring: #F6821F40;
@@ -1141,6 +1142,20 @@
                 </div>
                 <div class="demo-card" style="grid-column: 1 / 3;">
                     <div class="demo-card-header">
+                        <div class="demo-card-icon"><i class="ph ph-command"></i></div>
+                        <h2>Search Modal</h2>
+                    </div>
+                    <p>Command palette-style modal search. Opens with <kbd
+                            style="background: var(--bg-elevated); padding: 2px 6px; border-radius: 4px; font-size: 12px;">Cmd/Ctrl
+                            + K</kbd>. Full keyboard navigation support.</p>
+                    <button onclick="document.querySelector('search-modal-snippet').open()"
+                        style="background: var(--accent-gradient); color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-weight: 500;">
+                        Open Search Modal
+                    </button>
+
+                </div>
+                <div class="demo-card" style="grid-column: 1 / 3;">
+                    <div class="demo-card-header">
                         <div class="demo-card-icon"><i class="ph ph-chat-circle-text"></i></div>
                         <h2>Full Page Chat</h2>
                     </div>
@@ -1218,6 +1233,7 @@
             <div class="configurator-wrapper">
                 <div class="config-tabs">
                     <button class="config-tab active" data-snippet="search-bar">Search Bar</button>
+                    <button class="config-tab" data-snippet="search-modal">Search Modal</button>
                     <button class="config-tab" data-snippet="chat-bubble">Chat Bubble</button>
                     <button class="config-tab" data-snippet="chat-page">Chat Page</button>
                 </div>
@@ -1303,7 +1319,14 @@
     max-results="10"&gt;
 &lt;/search-bar-snippet&gt;
 
-&lt;!-- 3. Full Page Chat (use in dedicated page) --&gt;
+&lt;!-- 3. Search Modal (Cmd/Ctrl+K to open) --&gt;
+&lt;search-modal-snippet 
+    api-url="https://api.example.com"
+    placeholder="Search documentation..."
+    shortcut="k"&gt;
+&lt;/search-modal-snippet&gt;
+
+&lt;!-- 4. Full Page Chat (use in dedicated page) --&gt;
 &lt;chat-page-snippet 
     api-url="https://api.example.com"
 &lt;/chat-page-snippet&gt;
@@ -1348,9 +1371,13 @@
             </div>
         </footer>
     </div>
-
+    <search-modal-snippet
+        api-url="https://ai-search-public-worker-staging.auto-rag.workers.dev/b33f5a77-ce16-4d2a-9397-c56270ac0a62"
+        placeholder="Search documentation..." max-results="8">
+    </search-modal-snippet>
     <!-- Import the library -->
     <script type="module" src="/src/main.ts"></script>
+
 
     <!-- Theme Toggle Script -->
     <script>
@@ -1382,6 +1409,10 @@
             if (searchBar) {
                 searchBar.setAttribute('theme', theme);
             }
+            const searchModal = document.querySelector('search-modal-snippet');
+            if (searchModal) {
+                searchModal.setAttribute('theme', theme);
+            }
         }
 
         applyTheme(savedTheme);
@@ -1397,11 +1428,13 @@
     <!-- Configurator Script -->
     <script>
         const PROP_CONFIGS = [
-            { name: 'api-url', type: 'text', defaultValue: 'https://ai-search-public-worker-staging.auto-rag.workers.dev/b33f5a77-ce16-4d2a-9397-c56270ac0a62', description: 'API endpoint URL', appliesTo: ['search-bar', 'chat-bubble', 'chat-page'] },
-            { name: 'placeholder', type: 'text', defaultValue: 'Type a message...', description: 'Input placeholder text', appliesTo: ['search-bar', 'chat-bubble', 'chat-page'] },
-            { name: 'max-results', type: 'number', defaultValue: 10, description: 'Maximum number of results', appliesTo: ['search-bar'] },
-            { name: 'debounce-ms', type: 'number', defaultValue: 300, description: 'Debounce delay in milliseconds', appliesTo: ['search-bar'] },
-            { name: 'theme', type: 'select', options: ['light', 'dark', 'auto'], defaultValue: 'auto', description: 'Color theme', appliesTo: ['search-bar', 'chat-bubble', 'chat-page'] }
+            { name: 'api-url', type: 'text', defaultValue: 'https://ai-search-public-worker-staging.auto-rag.workers.dev/b33f5a77-ce16-4d2a-9397-c56270ac0a62', description: 'API endpoint URL', appliesTo: ['search-bar', 'search-modal', 'chat-bubble', 'chat-page'] },
+            { name: 'placeholder', type: 'text', defaultValue: 'Type a message...', description: 'Input placeholder text', appliesTo: ['search-bar', 'search-modal', 'chat-bubble', 'chat-page'] },
+            { name: 'max-results', type: 'number', defaultValue: 10, description: 'Maximum number of results', appliesTo: ['search-bar', 'search-modal'] },
+            { name: 'debounce-ms', type: 'number', defaultValue: 300, description: 'Debounce delay in milliseconds', appliesTo: ['search-bar', 'search-modal'] },
+            { name: 'theme', type: 'select', options: ['light', 'dark', 'auto'], defaultValue: 'auto', description: 'Color theme', appliesTo: ['search-bar', 'search-modal', 'chat-bubble', 'chat-page'] },
+            { name: 'shortcut', type: 'text', defaultValue: 'k', description: 'Keyboard shortcut key', appliesTo: ['search-modal'] },
+            { name: 'use-meta-key', type: 'select', options: ['true', 'false'], defaultValue: 'true', description: 'Use Cmd/Ctrl modifier', appliesTo: ['search-modal'] }
         ];
 
         const CSS_VAR_CONFIGS = [
@@ -1680,6 +1713,15 @@
                 css.push(`${n}: ${v}`);
             });
             el.style.cssText = css.join('; ');
+
+            // For search-modal, add an open button since the modal is hidden by default
+            if (currentSnippet === 'search-modal') {
+                const openBtn = document.createElement('button');
+                openBtn.textContent = 'Open Search Modal (or press Cmd/Ctrl+K)';
+                openBtn.style.cssText = 'background: var(--accent-gradient, linear-gradient(135deg, #F6821F 0%, #FBAD41 100%)); color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-weight: 500; margin-bottom: 12px;';
+                openBtn.onclick = () => el.open();
+                container.appendChild(openBtn);
+            }
 
             container.appendChild(el);
             updateCode();

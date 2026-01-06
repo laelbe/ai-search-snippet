@@ -16,6 +16,7 @@ export { AISearchClient } from './api/ai-search.ts';
 export { ChatBubbleSnippet } from './components/chat-bubble-snippet.ts';
 export { ChatPageSnippet } from './components/chat-page-snippet.ts';
 export { SearchBarSnippet } from './components/search-bar-snippet.ts';
+export { SearchModalSnippet } from './components/search-modal-snippet.ts';
 
 // Export types for TypeScript users
 export type {
@@ -31,6 +32,7 @@ export type {
 import './components/chat-bubble-snippet.ts';
 import './components/search-bar-snippet.ts';
 import './components/chat-page-snippet.ts';
+import './components/search-modal-snippet.ts';
 
 // Provide a default export for convenience
 import { SearchBarSnippet } from './components/search-bar-snippet.ts';
