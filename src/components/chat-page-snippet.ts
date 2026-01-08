@@ -7,7 +7,12 @@ import type { Client } from '../api/index.ts';
 import { chatStyles } from '../styles/chat.ts';
 import { baseStyles } from '../styles/theme.ts';
 import type { SearchSnippetProps } from '../types/index.ts';
-import { createClient, createCustomEvent, parseAttribute } from '../utils/index.ts';
+import {
+  createClient,
+  createCustomEvent,
+  parseAttribute,
+  parseBooleanAttribute,
+} from '../utils/index.ts';
 import type { Message } from './chat-view.ts';
 import { ChatView } from './chat-view.ts';
 
@@ -77,7 +82,7 @@ export class ChatPageSnippet extends HTMLElement {
       apiUrl: parseAttribute(this.getAttribute('api-url'), 'http://localhost:3000'),
       placeholder: parseAttribute(this.getAttribute('placeholder'), 'Type a message...'),
       theme: parseAttribute(this.getAttribute('theme'), 'auto') as 'light' | 'dark' | 'auto',
-      hideBranding: this.hasAttribute('hide-branding'),
+      hideBranding: parseBooleanAttribute(this.getAttribute('hide-branding'), false),
     };
   }
 

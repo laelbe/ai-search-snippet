@@ -14,6 +14,7 @@ import {
   debounce,
   escapeHTML,
   parseAttribute,
+  parseBooleanAttribute,
   parseNumberAttribute,
 } from '../utils/index.ts';
 
@@ -93,7 +94,7 @@ export class SearchModalSnippet extends HTMLElement {
       theme: parseAttribute(this.getAttribute('theme'), 'auto') as 'light' | 'dark' | 'auto',
       shortcut: parseAttribute(this.getAttribute('shortcut'), 'k'),
       useMetaKey: this.getAttribute('use-meta-key') !== 'false',
-      hideBranding: this.hasAttribute('hide-branding'),
+      hideBranding: parseBooleanAttribute(this.getAttribute('hide-branding'), false),
     };
   }
 

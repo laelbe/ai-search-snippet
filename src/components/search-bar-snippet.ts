@@ -13,6 +13,7 @@ import {
   debounce,
   escapeHTML,
   parseAttribute,
+  parseBooleanAttribute,
   parseNumberAttribute,
 } from '../utils/index.ts';
 
@@ -73,7 +74,7 @@ export class SearchBarSnippet extends HTMLElement {
       maxResults: parseNumberAttribute(this.getAttribute('max-results'), 10),
       debounceMs: parseNumberAttribute(this.getAttribute('debounce-ms'), 300),
       theme: parseAttribute(this.getAttribute('theme'), 'auto') as 'light' | 'dark' | 'auto',
-      hideBranding: this.hasAttribute('hide-branding'),
+      hideBranding: parseBooleanAttribute(this.getAttribute('hide-branding'), false),
     };
   }
 
