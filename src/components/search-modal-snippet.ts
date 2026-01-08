@@ -54,6 +54,7 @@ export class SearchModalSnippet extends HTMLElement {
       'max-results',
       'theme',
       'shortcut',
+      'use-meta-key',
       'debounce-ms',
       'hide-branding',
     ];

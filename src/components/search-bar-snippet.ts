@@ -37,7 +37,7 @@ export class SearchBarSnippet extends HTMLElement {
   private handleSearchButtonClick: (() => void) | null = null;
 
   static get observedAttributes(): string[] {
-    return ['api-url', 'placeholder', 'max-results', 'theme', 'hide-branding'];
+    return ['api-url', 'placeholder', 'max-results', 'debounce-ms', 'theme', 'hide-branding'];
   }
 
   constructor() {

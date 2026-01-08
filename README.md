@@ -32,77 +32,162 @@ yarn add nlweb-cl-snippet
 <!-- Import the library -->
 <script type="module" src="https://cdn.example.com/search-snippet.es.js"></script>
 
-<!-- Use in chat mode -->
-<search-snippet 
+<!-- Search bar with results -->
+<search-bar-snippet 
     api-url="https://api.example.com"
-    mode="chat">
-</search-snippet>
-
-<!-- Use in search mode -->
-<search-snippet 
-    api-url="https://api.example.com"
-    mode="search"
+    placeholder="Search..."
     max-results="10">
-</search-snippet>
+</search-bar-snippet>
+
+<!-- Modal search (opens with Cmd/Ctrl+K) -->
+<search-modal-snippet 
+    api-url="https://api.example.com"
+    placeholder="Search documentation..."
+    max-results="10">
+</search-modal-snippet>
+
+<!-- Floating chat bubble -->
+<chat-bubble-snippet 
+    api-url="https://api.example.com"
+    placeholder="Type a message...">
+</chat-bubble-snippet>
+
+<!-- Full-page chat with history -->
+<chat-page-snippet 
+    api-url="https://api.example.com"
+    placeholder="Type a message...">
+</chat-page-snippet>
 ```
 
 ## 📖 API Reference
 
-### Attributes
+### Components
+
+The library provides four Web Components:
+
+| Component | Tag | Description |
+|-----------|-----|-------------|
+| `SearchBarSnippet` | `<search-bar-snippet>` | Search input with results dropdown |
+| `SearchModalSnippet` | `<search-modal-snippet>` | Modal search with Cmd/Ctrl+K shortcut |
+| `ChatBubbleSnippet` | `<chat-bubble-snippet>` | Floating chat bubble overlay |
+| `ChatPageSnippet` | `<chat-page-snippet>` | Full-page chat with session history |
+
+### Common Attributes
+
+These attributes are available on all components:
 
 | Attribute | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `api-url` | string | (required) | nlweb API endpoint URL |
-| `mode` | `'search' \| 'chat'` | `'chat'` | Interface mode |
-| `api-key` | string | - | Optional API authentication key |
-| `placeholder` | string | Auto | Input placeholder text |
-| `max-results` | number | 10 | Maximum search results to display |
-| `debounce-ms` | number | 300 | Input debounce delay in milliseconds |
-| `enable-streaming` | boolean | true | Enable/disable streaming responses |
+| `api-url` | string | `http://localhost:3000` | API endpoint URL |
+| `placeholder` | string | Component-specific | Input placeholder text |
 | `theme` | `'light' \| 'dark' \| 'auto'` | `'auto'` | Color scheme |
+| `hide-branding` | boolean | `false` | Hide the "Powered by" branding |
 
-### Properties (JavaScript API)
+### Search Components Attributes
+
+Additional attributes for `<search-bar-snippet>` and `<search-modal-snippet>`:
+
+| Attribute | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `max-results` | number | `10` | Maximum search results to display |
+| `debounce-ms` | number | `300` | Input debounce delay in milliseconds |
+
+### Modal-Specific Attributes
+
+Additional attributes for `<search-modal-snippet>`:
+
+| Attribute | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `shortcut` | string | `'k'` | Keyboard shortcut key (with Cmd/Ctrl) |
+| `use-meta-key` | boolean | `true` | Use meta key (Cmd on Mac, Ctrl on Windows) |
+
+### JavaScript API
+
+#### Search Bar (`<search-bar-snippet>`)
 
 ```typescript
-// Get the component instance
-const snippet = document.querySelector('search-snippet');
+const searchBar = document.querySelector('search-bar-snippet');
 
-// Chat mode methods
-snippet.sendMessage('Hello!');           // Send a message
-const messages = snippet.getMessages();  // Get message history
-snippet.clearChat();                     // Clear chat history
+// Perform a search programmatically
+searchBar.search('query');
+```
 
-// Search mode methods
-snippet.search('query');                 // Perform a search
+#### Search Modal (`<search-modal-snippet>`)
 
-// Common methods
-snippet.setMode('chat');                 // Switch between modes
+```typescript
+const modal = document.querySelector('search-modal-snippet');
+
+modal.open();                            // Open the modal
+modal.close();                           // Close the modal
+modal.toggle();                          // Toggle open/closed
+modal.search('query');                   // Open and search
+const results = modal.getResults();      // Get current results
+const isOpen = modal.isModalOpen();      // Check if open
+```
+
+#### Chat Bubble (`<chat-bubble-snippet>`)
+
+```typescript
+const chatBubble = document.querySelector('chat-bubble-snippet');
+
+await chatBubble.sendMessage('Hello!');  // Send a message
+const messages = chatBubble.getMessages(); // Get message history
+chatBubble.clearChat();                  // Clear chat history
+```
+
+#### Chat Page (`<chat-page-snippet>`)
+
+```typescript
+const chatPage = document.querySelector('chat-page-snippet');
+
+await chatPage.sendMessage('Hello!');    // Send a message
+const messages = chatPage.getMessages(); // Get message history
+chatPage.clearChat();                    // Clear current chat
+const sessions = chatPage.getSessions(); // Get all chat sessions
+const current = chatPage.getCurrentSession(); // Get current session
 ```
 
 ### Events
 
-```javascript
-const snippet = document.querySelector('search-snippet');
+#### Common Events (all components)
 
-// Listen for events
-snippet.addEventListener('ready', () => {
+```javascript
+const component = document.querySelector('search-bar-snippet');
+
+component.addEventListener('ready', () => {
     console.log('Component ready');
 });
 
-snippet.addEventListener('search', (e) => {
-    console.log('Search results:', e.detail.results);
-});
-
-snippet.addEventListener('message', (e) => {
-    console.log('New message:', e.detail.message);
-});
-
-snippet.addEventListener('error', (e) => {
+component.addEventListener('error', (e) => {
     console.error('Error:', e.detail.error);
 });
+```
 
-snippet.addEventListener('modeChange', (e) => {
-    console.log('Mode changed to:', e.detail.mode);
+#### Modal-Specific Events
+
+```javascript
+const modal = document.querySelector('search-modal-snippet');
+
+modal.addEventListener('open', () => {
+    console.log('Modal opened');
+});
+
+modal.addEventListener('close', () => {
+    console.log('Modal closed');
+});
+
+modal.addEventListener('result-select', (e) => {
+    console.log('Selected result:', e.detail.result);
+});
+```
+
+#### Chat Events
+
+```javascript
+const chat = document.querySelector('chat-bubble-snippet');
+
+chat.addEventListener('message', (e) => {
+    console.log('New message:', e.detail.message);
 });
 ```
 
@@ -113,7 +198,10 @@ snippet.addEventListener('modeChange', (e) => {
 Customize the appearance using CSS variables:
 
 ```css
-search-snippet {
+search-bar-snippet,
+search-modal-snippet,
+chat-bubble-snippet,
+chat-page-snippet {
     /* Colors */
     --search-snippet-primary-color: #0066cc;
     --search-snippet-primary-hover: #0052a3;
@@ -149,7 +237,7 @@ search-snippet {
 
 **Dark Theme:**
 ```css
-search-snippet {
+search-bar-snippet {
     --search-snippet-primary-color: #4dabf7;
     --search-snippet-background: #1a1b1e;
     --search-snippet-text-color: #c1c2c5;
@@ -159,7 +247,7 @@ search-snippet {
 
 **Custom Brand:**
 ```css
-search-snippet {
+chat-bubble-snippet {
     --search-snippet-primary-color: #667eea;
     --search-snippet-primary-hover: #5568d3;
     --search-snippet-border-radius: 12px;
@@ -172,16 +260,22 @@ search-snippet {
 ### TypeScript
 
 ```typescript
-import { SearchSnippet, type SearchSnippetProps, type Message } from 'nlweb-cl-snippet';
+import { 
+    SearchBarSnippet, 
+    SearchModalSnippet, 
+    ChatBubbleSnippet, 
+    ChatPageSnippet,
+    type SearchSnippetProps 
+} from 'nlweb-cl-snippet';
 
 // Type-safe usage
-const snippet = document.createElement('search-snippet') as SearchSnippet;
-snippet.setAttribute('api-url', 'https://api.example.com');
-snippet.setAttribute('mode', 'chat');
+const searchBar = document.createElement('search-bar-snippet') as SearchBarSnippet;
+searchBar.setAttribute('api-url', 'https://api.example.com');
+searchBar.setAttribute('max-results', '10');
 
-// Use typed methods
-const messages: Message[] = snippet.getMessages();
-await snippet.sendMessage('Hello, world!');
+const chatBubble = document.createElement('chat-bubble-snippet') as ChatBubbleSnippet;
+chatBubble.setAttribute('api-url', 'https://api.example.com');
+await chatBubble.sendMessage('Hello, world!');
 ```
 
 ### React Integration
@@ -194,25 +288,24 @@ function ChatWidget() {
     const ref = useRef<HTMLElement>(null);
 
     useEffect(() => {
-        const snippet = ref.current;
+        const chat = ref.current;
         
         const handleMessage = (e: CustomEvent) => {
             console.log('Message:', e.detail);
         };
 
-        snippet?.addEventListener('message', handleMessage as EventListener);
+        chat?.addEventListener('message', handleMessage as EventListener);
         
         return () => {
-            snippet?.removeEventListener('message', handleMessage as EventListener);
+            chat?.removeEventListener('message', handleMessage as EventListener);
         };
     }, []);
 
     return (
-        <search-snippet
+        <chat-bubble-snippet
             ref={ref}
             api-url="https://api.example.com"
-            mode="chat"
-            enable-streaming={true}
+            placeholder="Ask a question..."
         />
     );
 }
@@ -222,9 +315,9 @@ function ChatWidget() {
 
 ```vue
 <template>
-    <search-snippet
+    <chat-bubble-snippet
         :api-url="apiUrl"
-        mode="chat"
+        placeholder="Ask a question..."
         @message="handleMessage"
         @error="handleError"
     />
@@ -274,12 +367,14 @@ npm run format
 nlweb-cl-snippet/
 ├── src/
 │   ├── api/
-│   │   ├── nlweb-client.ts      # API client with streaming
-│   │   └── ask-api.ts            # Legacy API wrapper
+│   │   ├── index.ts              # Base Client abstract class
+│   │   └── ai-search.ts          # AISearchClient with streaming
 │   ├── components/
-│   │   ├── search-snippet.ts     # Main web component
-│   │   ├── search-view.ts        # Search interface
-│   │   └── chat-view.ts          # Chat interface
+│   │   ├── search-bar-snippet.ts   # Search input with results
+│   │   ├── search-modal-snippet.ts # Modal search with Cmd/Ctrl+K
+│   │   ├── chat-bubble-snippet.ts  # Floating chat bubble
+│   │   ├── chat-page-snippet.ts    # Full-page chat with history
+│   │   └── chat-view.ts            # Shared chat interface
 │   ├── styles/
 │   │   ├── theme.ts              # Base styles & CSS variables
 │   │   ├── search.ts             # Search-specific styles

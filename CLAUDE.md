@@ -39,10 +39,11 @@ src/
 │   ├── index.ts              # Base Client abstract class
 │   └── ai-search.ts          # AISearchClient - main API client with streaming
 ├── components/
-│   ├── search-bar-snippet.ts # <search-bar-snippet> - search input with results
-│   ├── chat-bubble-snippet.ts # <chat-bubble-snippet> - floating chat bubble
-│   ├── chat-page-snippet.ts  # <chat-page-snippet> - full-page chat with history
-│   └── chat-view.ts          # Shared ChatView class (not a web component)
+│   ├── search-bar-snippet.ts   # <search-bar-snippet> - search input with results
+│   ├── search-modal-snippet.ts # <search-modal-snippet> - modal search with Cmd/Ctrl+K
+│   ├── chat-bubble-snippet.ts  # <chat-bubble-snippet> - floating chat bubble
+│   ├── chat-page-snippet.ts    # <chat-page-snippet> - full-page chat with history
+│   └── chat-view.ts            # Shared ChatView class (not a web component)
 ├── styles/
 │   ├── theme.ts              # Base CSS variables and common styles
 │   ├── chat.ts               # Chat-specific styles
@@ -57,11 +58,12 @@ src/
 
 ## Architecture
 
-### Web Components (3 exported)
+### Web Components (4 exported)
 
 | Component | Tag | Purpose |
 |-----------|-----|---------|
 | `SearchBarSnippet` | `<search-bar-snippet>` | Search input with results dropdown |
+| `SearchModalSnippet` | `<search-modal-snippet>` | Modal combobox search with Cmd/Ctrl+K shortcut |
 | `ChatBubbleSnippet` | `<chat-bubble-snippet>` | Floating chat bubble overlay |
 | `ChatPageSnippet` | `<chat-page-snippet>` | Full-page chat with session history |
 
