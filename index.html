@@ -11,6 +11,11 @@
         href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500&display=swap"
         rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Prism.js for syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
     <style>
         :root {
             /* Cloudflare AI Search Color Palette - Light Theme */
@@ -1004,6 +1009,134 @@
             overflow-y: auto;
         }
 
+        /* Prism.js overrides for better integration */
+        .code-content pre[class*="language-"],
+        .code-section pre[class*="language-"] {
+            margin: 0;
+            padding: 0;
+            background: transparent;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .code-content code[class*="language-"],
+        .code-section code[class*="language-"] {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            background: transparent;
+        }
+
+        /* Light theme syntax highlighting */
+        .code-content pre[class*="language-"] {
+            color: var(--color-foreground-100);
+        }
+
+        .code-content .token.tag {
+            color: #22863a;
+        }
+
+        .code-content .token.attr-name {
+            color: #6f42c1;
+        }
+
+        .code-content .token.attr-value {
+            color: #032f62;
+        }
+
+        .code-content .token.punctuation {
+            color: var(--color-foreground-200);
+        }
+
+        .code-content .token.comment {
+            color: #6a737d;
+            font-style: italic;
+        }
+
+        .code-content .token.string {
+            color: #032f62;
+        }
+
+        .code-content .token.property {
+            color: #005cc5;
+        }
+
+        .code-content .token.selector {
+            color: #22863a;
+        }
+
+        [data-theme="dark"] .code-content .token.tag {
+            color: #7ee787;
+        }
+
+        [data-theme="dark"] .code-content .token.attr-name {
+            color: #d2a8ff;
+        }
+
+        [data-theme="dark"] .code-content .token.attr-value {
+            color: #a5d6ff;
+        }
+
+        [data-theme="dark"] .code-content .token.punctuation {
+            color: #8b949e;
+        }
+
+        [data-theme="dark"] .code-content .token.comment {
+            color: #8b949e;
+            font-style: italic;
+        }
+
+        [data-theme="dark"] .code-content .token.string {
+            color: #a5d6ff;
+        }
+
+        [data-theme="dark"] .code-content .token.property {
+            color: #79c0ff;
+        }
+
+        [data-theme="dark"] .code-content .token.selector {
+            color: #7ee787;
+        }
+
+        /* Code output section (configurator - always dark background) */
+        .code-output.language-html,
+        .code-output code.language-html {
+            background: transparent;
+        }
+
+        .code-output .token.tag {
+            color: #7ee787;
+        }
+
+        .code-output .token.attr-name {
+            color: #d2a8ff;
+        }
+
+        .code-output .token.attr-value {
+            color: #a5d6ff;
+        }
+
+        .code-output .token.punctuation {
+            color: #8b949e;
+        }
+
+        .code-output .token.comment {
+            color: #8b949e;
+            font-style: italic;
+        }
+
+        .code-output .token.string {
+            color: #a5d6ff;
+        }
+
+        .code-output .token.property {
+            color: #79c0ff;
+        }
+
+        .code-output .token.selector {
+            color: #7ee787;
+        }
+
         /* Footer */
         .footer {
             position: relative;
@@ -1556,7 +1689,7 @@
                                 </svg>
                                 Generated Code
                             </h3>
-                            <pre class="code-output"><code id="generatedCode"></code></pre>
+                            <pre class="code-output language-html"><code id="generatedCode" class="language-html"></code></pre>
                         </div>
                     </div>
                 </div>
@@ -1578,7 +1711,7 @@
                     <button class="code-copy" onclick="copyQuickStart()">Copy</button>
                 </div>
                 <div class="code-content">
-                    <pre><code>&lt;!-- Import the library --&gt;
+                    <pre class="language-html"><code class="language-html">&lt;!-- Import the library --&gt;
 &lt;script type="module" src="https://cdn.example.com/search-snippet.es.js"&gt;&lt;/script&gt;
 
 &lt;!-- 1. Chat Bubble Widget (Fixed bottom-right) --&gt;
@@ -1706,6 +1839,24 @@
         });
     </script>
 
+
+    <!-- Quick Start Copy Function -->
+    <script>
+        async function copyQuickStart() {
+            const codeBlock = document.querySelector('#quick-start .code-content code');
+            if (codeBlock) {
+                try {
+                    await navigator.clipboard.writeText(codeBlock.textContent);
+                    const btn = document.querySelector('#quick-start .code-copy');
+                    const orig = btn.textContent;
+                    btn.textContent = 'Copied!';
+                    setTimeout(() => { btn.textContent = orig }, 2000);
+                } catch (e) {
+                    console.error('Copy failed:', e);
+                }
+            }
+        }
+    </script>
 
     <!-- Configurator Script -->
     <script>
@@ -2050,7 +2201,12 @@
             }
 
             const code = `<!-- HTML -->\n<${tag}${props.length ? `\n${props.join('\n')}` : ''}>\n</${tag}>\n\n<!-- CSS -->\n<style>\n${cssCode}\n</style>`;
-            document.getElementById('generatedCode').textContent = code;
+            const codeEl = document.getElementById('generatedCode');
+            codeEl.textContent = code;
+            // Re-highlight with Prism
+            if (window.Prism) {
+                Prism.highlightElement(codeEl);
+            }
         }
 
         function resetConfig() {
