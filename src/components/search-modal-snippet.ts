@@ -152,9 +152,6 @@ export class SearchModalSnippet extends HTMLElement {
             autocomplete="off"
             spellcheck="false"
           />
-          <div class="modal-shortcut-hint">
-            <kbd class="modal-kbd">Esc</kbd>
-          </div>
         </div>
         <div class="modal-content">
           <div class="modal-results" id="modal-results-list" role="listbox" aria-label="Search results">
@@ -423,7 +420,6 @@ export class SearchModalSnippet extends HTMLElement {
           <circle cx="11" cy="11" r="8"></circle>
           <path d="m21 21-4.35-4.35"></path>
         </svg>
-        <div class="modal-empty-title">Search</div>
         <div class="modal-empty-description">Start typing to search</div>
       </div>
     `;
