@@ -34,8 +34,8 @@ export class ChatBubbleSnippet extends HTMLElement {
   private handleMinimizeClick: (() => void) | null = null;
   private handleClearClick: (() => void) | null = null;
 
-  static get observedAttributes(): string[] {
-    return ['api-url', 'placeholder', 'theme', 'hide-branding'];
+  static get observedAttributes() {
+    return ['api-url', 'placeholder', 'theme', 'hide-branding'] as const;
   }
 
   constructor() {

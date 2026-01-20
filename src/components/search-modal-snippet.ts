@@ -57,7 +57,7 @@ export class SearchModalSnippet extends HTMLElement {
   } | null = null;
   private savedHtmlOverflow: string | null = null;
 
-  static get observedAttributes(): string[] {
+  static get observedAttributes() {
     return [
       'api-url',
       'placeholder',
@@ -67,7 +67,7 @@ export class SearchModalSnippet extends HTMLElement {
       'use-meta-key',
       'debounce-ms',
       'hide-branding',
-    ];
+    ] as const;
   }
 
   constructor() {

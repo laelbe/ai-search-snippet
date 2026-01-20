@@ -1901,35 +1901,13 @@
                     </div>
                     <div class="code-content">
                         <pre class="language-jsx"><code class="language-jsx">import { useEffect, useRef } from 'react';
-import '@anthropic/search-snippet';
-
-// Wrapper component for type-safe props
-function SearchBar({ apiUrl, placeholder, maxResults }: {
-  apiUrl: string;
-  placeholder?: string;
-  maxResults?: number;
-}) {
-  const ref = useRef&lt;HTMLElement&gt;(null);
-
-  useEffect(() =&gt; {
-    // Web Components work directly in React 19+
-    // For older versions, set attributes manually
-    if (ref.current) {
-      ref.current.setAttribute('api-url', apiUrl);
-      if (placeholder) ref.current.setAttribute('placeholder', placeholder);
-      if (maxResults) ref.current.setAttribute('max-results', String(maxResults));
-    }
-  }, [apiUrl, placeholder, maxResults]);
-
-  return &lt;search-bar-snippet ref={ref} /&gt;;
-}
+import "@cloudflare/ai-search-snippet";
 
 // Usage in your app
 export default function App() {
   return (
     &lt;div&gt;
-      {/* Search Bar */}
-      &lt;SearchBar 
+      &lt;search-bar-snippet 
         apiUrl="https://api.example.com"
         placeholder="Search..."
         maxResults={10}
@@ -1937,13 +1915,13 @@ export default function App() {
 
       {/* Chat Bubble - works directly as Web Component */}
       &lt;chat-bubble-snippet 
-        api-url="https://api.example.com"
+        apiUrl="https://api.example.com"
         style={{ '--search-snippet-primary-color': '#F6821F' } as React.CSSProperties}
       /&gt;
 
       {/* Search Modal with keyboard shortcut */}
       &lt;search-modal-snippet 
-        api-url="https://api.example.com"
+        apiUrl="https://api.example.com"
         placeholder="Search documentation..."
         shortcut="k"
       /&gt;
@@ -1951,34 +1929,8 @@ export default function App() {
   );
 }
 
-// TypeScript declarations (add to global.d.ts)
-declare namespace JSX {
-  interface IntrinsicElements {
-    'search-bar-snippet': React.DetailedHTMLProps&lt;
-      React.HTMLAttributes&lt;HTMLElement&gt; &amp; {
-        'api-url'?: string;
-        placeholder?: string;
-        'max-results'?: string;
-      },
-      HTMLElement
-    &gt;;
-    'chat-bubble-snippet': React.DetailedHTMLProps&lt;
-      React.HTMLAttributes&lt;HTMLElement&gt; &amp; {
-        'api-url'?: string;
-        placeholder?: string;
-      },
-      HTMLElement
-    &gt;;
-    'search-modal-snippet': React.DetailedHTMLProps&lt;
-      React.HTMLAttributes&lt;HTMLElement&gt; &amp; {
-        'api-url'?: string;
-        placeholder?: string;
-        shortcut?: string;
-      },
-      HTMLElement
-    &gt;;
-  }
-}</code></pre>
+// TypeScript declarations see example here: https://github.com/cloudflare/ai-search-snippet/blob/main/demos/react/index.d.ts
+</code></pre>
                     </div>
                 </div>
 
@@ -1990,7 +1942,7 @@ declare namespace JSX {
                     </div>
                     <div class="code-content">
                         <pre class="language-html"><code class="language-html">&lt;script setup lang="ts"&gt;
-import '@anthropic/search-snippet';
+import "@cloudflare/ai-search-snippet";
 import { ref } from 'vue';
 
 const apiUrl = 'https://api.example.com';

@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-**nlweb-cl-snippet** is a production-ready, zero-dependency TypeScript Web Component library providing search and chat interfaces with streaming support for AI-powered search APIs.
+**ai-search-snippet** is a production-ready, zero-dependency TypeScript Web Component library providing search and chat interfaces with streaming support for AI-powered search APIs.
 
 - **Version:** 0.0.3
 - **Key Features:** Zero dependencies, framework-agnostic, Shadow DOM encapsulation, streaming support, WCAG 2.1 AA compliant
@@ -177,7 +177,6 @@ The components expect a backend API with these endpoints:
 | Endpoint | Method | Purpose |
 |----------|--------|---------|
 | `/search` | POST | Standard search (non-streaming) |
-| `/ai-search` | POST | AI-powered search (streaming SSE) |
 | `/chat/completions` | POST | Chat completions (OpenAI-compatible) |
 
 ## Component Attributes

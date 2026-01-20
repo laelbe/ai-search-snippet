@@ -44,8 +44,8 @@ export class ChatPageSnippet extends HTMLElement {
   private handleChatListClick: ((e: Event) => void) | null = null;
   private handleMessageEvent: (() => void) | null = null;
 
-  static get observedAttributes(): string[] {
-    return ['api-url', 'placeholder', 'theme', 'hide-branding'];
+  static get observedAttributes() {
+    return ['api-url', 'placeholder', 'theme', 'hide-branding'] as const;
   }
 
   constructor() {
