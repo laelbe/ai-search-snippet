@@ -44,6 +44,14 @@ export function escapeHTML(text: string): string {
 }
 
 /**
+ * Decode HTML entities (e.g., &#38; -> &, &amp; -> &)
+ */
+export function decodeHTMLEntities(text: string): string {
+  const doc = new DOMParser().parseFromString(text, 'text/html');
+  return doc.documentElement.textContent || '';
+}
+
+/**
  * Format timestamp to readable date
  */
 export function formatTimestamp(timestamp: number): string {

@@ -4,13 +4,14 @@
  */
 
 import type {
+  AISearchAPIResponse,
   ChatTextResponse,
   ChatTypes,
-  AISearchAPIResponse,
   SearchError,
   SearchOptions,
   SearchResult,
 } from '../types/index.ts';
+import { decodeHTMLEntities } from '../utils/index.ts';
 import { Client } from './index.ts';
 
 export class AISearchClient extends Client {
@@ -87,8 +88,8 @@ export class AISearchClient extends Client {
               ({
                 type: 'result',
                 id: chunk.id,
-                title: chunk.item.metadata.title,
-                description: chunk.item.metadata.description,
+                title: decodeHTMLEntities(chunk.item.metadata.title),
+                description: decodeHTMLEntities(chunk.item.metadata.description),
                 url: chunk.item.key,
                 image: chunk.item.metadata.image || undefined,
                 metadata: chunk.item.metadata as unknown as Record<string, unknown>,
