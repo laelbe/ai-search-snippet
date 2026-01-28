@@ -37,10 +37,10 @@ export class SearchModalSnippet extends HTMLElement {
   private resultsContainer: HTMLElement | null = null;
   private footerCount: HTMLElement | null = null;
   private isOpen = false;
-  private isLoading = false;
   private results: SearchResult[] = [];
   private activeIndex = -1;
   private debouncedSearch: ((query: string) => void) | null = null;
+  private currentSearchController: AbortController | null = null;
 
   // Event handler references for cleanup
   private handleGlobalKeydown: ((e: KeyboardEvent) => void) | null = null;
@@ -341,21 +341,35 @@ export class SearchModalSnippet extends HTMLElement {
   }
 
   private async performSearch(query: string): Promise<void> {
-    if (this.isLoading || !this.client) return;
+    if (!this.client) return;
 
-    this.isLoading = true;
+    // Cancel any existing request before starting a new one
+    if (this.currentSearchController) {
+      this.currentSearchController.abort();
+      this.currentSearchController = null;
+    }
+
+    // Create new controller for this request
+    this.currentSearchController = new AbortController();
     this.showLoadingState();
 
     try {
-      const results = await this.client.search(query, { streaming: false });
+      const results = await this.client.search(query, {
+        streaming: false,
+        signal: this.currentSearchController.signal,
+      });
       const props = this.getProps();
       this.results = results.slice(0, props.maxResults || 10);
       this.activeIndex = this.results.length > 0 ? 0 : -1;
       this.displayResults(this.results, query);
     } catch (error) {
+      // Don't show error state for cancelled requests
+      if ((error as Error).name === 'AbortError') {
+        return;
+      }
       this.showErrorState((error as Error).message);
     } finally {
-      this.isLoading = false;
+      this.currentSearchController = null;
     }
   }
 
@@ -606,6 +620,12 @@ export class SearchModalSnippet extends HTMLElement {
   }
 
   private cleanup(): void {
+    // Cancel any in-flight search request
+    if (this.currentSearchController) {
+      this.currentSearchController.abort();
+      this.currentSearchController = null;
+    }
+
     // Remove global keyboard listener
     if (this.handleGlobalKeydown) {
       document.removeEventListener('keydown', this.handleGlobalKeydown);
