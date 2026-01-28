@@ -1123,15 +1123,57 @@
             color: var(--stone-400);
         }
 
+        .code-section .quickstart-tabs {
+            background: #1e1e1e;
+            border-bottom-color: #333;
+            padding-top: 0;
+        }
+
+        .code-section .quickstart-tab {
+            color: #888;
+        }
+
+        .code-section .quickstart-tab:hover {
+            color: #ccc;
+            background: #2a2a2a;
+        }
+
+        .code-section .quickstart-tab.active {
+            background: #2d2d2d;
+            color: #e5e5e5;
+            border-color: #333;
+            border-bottom-color: #2d2d2d;
+        }
+
+        .code-section .code-header {
+            background: #2d2d2d;
+            border-bottom-color: #333;
+        }
+
+        .code-section .code-title {
+            color: #888;
+        }
+
+        .code-section .code-copy {
+            background: #1e1e1e;
+            border-color: #444;
+            color: #aaa;
+        }
+
+        .code-section .code-copy:hover {
+            background: #333;
+            color: #e5e5e5;
+        }
+
         .code-output {
             background: transparent;
-            margin: 0;
+            margin: 0 !important;
             padding: 0;
             color: #e5e5e5;
             font-family: var(--font-mono);
             font-size: 0.75rem;
             line-height: 1.7;
-            max-height: 180px;
+            max-height: 280px;
             overflow-y: auto;
         }
 
@@ -1967,14 +2009,6 @@
                                     </svg>
                                     Reset
                                 </button>
-                                <button class="config-btn" id="copyBtn">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round">
-                                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-                                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-                                    </svg>
-                                    Copy Code
-                                </button>
                             </div>
 
                             <div class="config-section">
@@ -2032,8 +2066,59 @@
                                     </svg>
                                     Generated Code
                                 </h3>
-                                <pre
-                                    class="code-output language-html"><code id="generatedCode" class="language-html"></code></pre>
+                                <div class="quickstart-tabs">
+                                    <button class="quickstart-tab active" data-code-tab="html">
+                                        <svg viewBox="0 0 24 24" fill="currentColor">
+                                            <path
+                                                d="M1.5 0h21l-1.91 21.563L11.977 24l-8.564-2.438L1.5 0zm7.031 9.75l-.232-2.718 10.059.003.23-2.622L5.412 4.41l.698 8.01h9.126l-.326 3.426-2.91.804-2.955-.81-.188-2.11H6.248l.33 4.171L12 19.351l5.379-1.443.744-8.157H8.531z" />
+                                        </svg>
+                                        HTML
+                                    </button>
+                                    <button class="quickstart-tab" data-code-tab="react">
+                                        <svg viewBox="0 0 24 24" fill="currentColor">
+                                            <path
+                                                d="M14.23 12.004a2.236 2.236 0 0 1-2.235 2.236 2.236 2.236 0 0 1-2.236-2.236 2.236 2.236 0 0 1 2.235-2.236 2.236 2.236 0 0 1 2.236 2.236zm2.648-10.69c-1.346 0-3.107.96-4.888 2.622-1.78-1.653-3.542-2.602-4.887-2.602-.41 0-.783.093-1.106.278-1.375.793-1.683 3.264-.973 6.365C1.98 8.917 0 10.42 0 12.004c0 1.59 1.99 3.097 5.043 4.03-.704 3.113-.39 5.588.988 6.38.32.187.69.275 1.102.275 1.345 0 3.107-.96 4.888-2.624 1.78 1.654 3.542 2.603 4.887 2.603.41 0 .783-.09 1.106-.275 1.374-.792 1.683-3.263.973-6.365C22.02 15.096 24 13.59 24 12.004c0-1.59-1.99-3.097-5.043-4.032.704-3.11.39-5.587-.988-6.38-.318-.184-.688-.277-1.092-.278zm-.005 1.09v.006c.225 0 .406.044.558.127.666.382.955 1.835.73 3.704-.054.46-.142.945-.25 1.44-.96-.236-2.006-.417-3.107-.534-.66-.905-1.345-1.727-2.035-2.447 1.592-1.48 3.087-2.292 4.105-2.295zm-9.77.02c1.012 0 2.514.808 4.11 2.28-.686.72-1.37 1.537-2.02 2.442-1.107.117-2.154.298-3.113.538-.112-.49-.195-.964-.254-1.42-.23-1.868.054-3.32.714-3.707.19-.09.4-.127.563-.132zm4.882 3.05c.455.468.91.992 1.36 1.564-.44-.02-.89-.034-1.345-.034-.46 0-.915.01-1.36.034.44-.572.895-1.096 1.345-1.565zM12 8.1c.74 0 1.477.034 2.202.093.406.582.802 1.203 1.183 1.86.372.64.71 1.29 1.018 1.946-.308.655-.646 1.31-1.013 1.95-.38.66-.773 1.288-1.18 1.87-.728.063-1.466.098-2.21.098-.74 0-1.477-.035-2.202-.093-.406-.582-.802-1.204-1.183-1.86-.372-.64-.71-1.29-1.018-1.946.303-.657.646-1.313 1.013-1.954.38-.66.773-1.286 1.18-1.868.728-.064 1.466-.098 2.21-.098zm-3.635.254c-.24.377-.48.763-.704 1.16-.225.39-.435.782-.635 1.174-.265-.656-.49-1.31-.676-1.947.64-.15 1.315-.283 2.015-.386zm7.26 0c.695.103 1.365.23 2.006.387-.18.632-.405 1.282-.66 1.933-.2-.39-.41-.783-.64-1.174-.225-.392-.465-.774-.705-1.146zm3.063.675c.484.15.944.317 1.375.498 1.732.74 2.852 1.708 2.852 2.476-.005.768-1.125 1.74-2.857 2.475-.42.18-.88.342-1.355.493-.28-.958-.646-1.956-1.1-2.98.45-1.017.81-2.01 1.085-2.964zm-13.395.004c.278.96.645 1.957 1.1 2.98-.45 1.017-.812 2.01-1.086 2.964-.484-.15-.944-.318-1.37-.5-1.732-.737-2.852-1.706-2.852-2.474 0-.768 1.12-1.742 2.852-2.476.42-.18.88-.342 1.356-.494zm11.678 4.28c.265.657.49 1.312.676 1.948-.64.157-1.316.29-2.016.39.24-.375.48-.762.705-1.158.225-.39.435-.788.636-1.18zm-9.945.02c.2.392.41.783.64 1.175.23.39.465.772.705 1.143-.695-.102-1.365-.23-2.006-.386.18-.63.406-1.282.66-1.933zM17.92 16.32c.112.493.2.968.254 1.423.23 1.868-.054 3.32-.714 3.708-.147.09-.338.128-.563.128-1.012 0-2.514-.807-4.11-2.28.686-.72 1.37-1.536 2.02-2.44 1.107-.118 2.154-.3 3.113-.54zm-11.83.01c.96.234 2.006.415 3.107.532.66.905 1.345 1.727 2.035 2.446-1.595 1.483-3.092 2.295-4.11 2.295-.22-.005-.406-.05-.553-.132-.666-.38-.955-1.834-.73-3.703.054-.46.142-.944.25-1.438zm4.56.64c.44.02.89.034 1.345.034.46 0 .915-.01 1.36-.034-.44.572-.895 1.095-1.345 1.565-.455-.47-.91-.993-1.36-1.565z" />
+                                        </svg>
+                                        React
+                                    </button>
+                                    <button class="quickstart-tab" data-code-tab="vue">
+                                        <svg viewBox="0 0 24 24" fill="currentColor">
+                                            <path
+                                                d="M24,1.61H14.06L12,5.16,9.94,1.61H0L12,22.39ZM12,14.08,5.16,2.23H9.59L12,6.41l2.41-4.18h4.43Z" />
+                                        </svg>
+                                        Vue
+                                    </button>
+                                </div>
+
+                                <!-- HTML Panel -->
+                                <div class="quickstart-panel active" data-code-panel="html">
+                                    <div class="code-header">
+                                        <span class="code-title">index.html</span>
+                                        <button class="code-copy" onclick="copyConfigCode('html')">Copy</button>
+                                    </div>
+                                    <pre
+                                        class="code-output language-html"><code id="generatedCodeHtml" class="language-html"></code></pre>
+                                </div>
+
+                                <!-- React Panel -->
+                                <div class="quickstart-panel" data-code-panel="react">
+                                    <div class="code-header">
+                                        <span class="code-title">App.tsx</span>
+                                        <button class="code-copy" onclick="copyConfigCode('react')">Copy</button>
+                                    </div>
+                                    <pre
+                                        class="code-output language-jsx"><code id="generatedCodeReact" class="language-jsx"></code></pre>
+                                </div>
+
+                                <!-- Vue Panel -->
+                                <div class="quickstart-panel" data-code-panel="vue">
+                                    <div class="code-header">
+                                        <span class="code-title">App.vue</span>
+                                        <button class="code-copy" onclick="copyConfigCode('vue')">Copy</button>
+                                    </div>
+                                    <pre
+                                        class="code-output language-html"><code id="generatedCodeVue" class="language-html"></code></pre>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -3630,48 +3715,164 @@ export default defineConfig({
             updateCode();
         }
 
+        // Helper: Convert kebab-case to camelCase
+        function toCamelCase(str) {
+            return str.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
+        }
+
+        // Helper: Get prop config by name
+        function getPropConfig(name) {
+            return PROP_CONFIGS.find(p => p.name === name);
+        }
+
         function updateCode() {
             const tag = `${currentSnippet}-snippet`;
-            const props = [];
+
+            // Collect non-default props
+            const propsData = [];
             PROP_CONFIGS.forEach(p => {
                 if (p.appliesTo.includes(currentSnippet)) {
                     const v = propValues.get(p.name);
-                    if (v !== undefined && v !== '' && v !== p.defaultValue) props.push(`  ${p.name}="${v}"`);
+                    if (v !== undefined && v !== '' && v !== p.defaultValue) {
+                        propsData.push({ name: p.name, value: v, type: p.type });
+                    }
                 }
             });
 
-            const sharedCss = [];
+            // Collect CSS variables (combine shared + light for inline styles)
+            const cssVarsData = [];
             cssValuesShared.forEach((v, n) => {
                 const c = CSS_VAR_CONFIGS.find(x => x.name === n);
-                if (c && v !== c.defaultValue) sharedCss.push(`  ${n}: ${v};`);
+                if (c && v !== c.defaultValue) cssVarsData.push({ name: n, value: v });
             });
-
-            const lightCss = [];
             cssValuesLight.forEach((v, n) => {
                 const c = CSS_VAR_CONFIGS.find(x => x.name === n);
-                if (c && v !== c.lightDefault) lightCss.push(`  ${n}: ${v};`);
+                if (c && v !== c.lightDefault) cssVarsData.push({ name: n, value: v });
             });
 
-            const darkCss = [];
+            // Also collect dark mode CSS for HTML output
+            const darkCssData = [];
             cssValuesDark.forEach((v, n) => {
                 const c = CSS_VAR_CONFIGS.find(x => x.name === n);
-                if (c && v !== c.darkDefault) darkCss.push(`  ${n}: ${v};`);
+                if (c && v !== c.darkDefault) darkCssData.push({ name: n, value: v });
             });
 
-            let cssCode = '';
-            if (sharedCss.length > 0 || lightCss.length > 0) {
-                cssCode += `${tag} {\n${[...sharedCss, ...lightCss].join('\n')}\n}`;
-            }
-            if (darkCss.length > 0) {
-                cssCode += `\n\n/* Dark mode */\n@media (prefers-color-scheme: dark) {\n  ${tag} {\n  ${darkCss.join('\n  ')}\n  }\n}`;
+            // Generate HTML code
+            const htmlCode = generateHtmlCode(tag, propsData, cssVarsData, darkCssData);
+            const htmlEl = document.getElementById('generatedCodeHtml');
+            if (htmlEl) {
+                htmlEl.textContent = htmlCode;
+                if (window.Prism) Prism.highlightElement(htmlEl);
             }
 
-            const code = `<!-- HTML -->\n<${tag}${props.length ? `\n${props.join('\n')}` : ''}>\n</${tag}>\n\n<!-- CSS -->\n<style>\n${cssCode}\n</style>`;
-            const codeEl = document.getElementById('generatedCode');
-            if (codeEl) {
-                codeEl.textContent = code;
-                if (window.Prism) Prism.highlightElement(codeEl);
+            // Generate React code
+            const reactCode = generateReactCode(tag, propsData, cssVarsData);
+            const reactEl = document.getElementById('generatedCodeReact');
+            if (reactEl) {
+                reactEl.textContent = reactCode;
+                if (window.Prism) Prism.highlightElement(reactEl);
             }
+
+            // Generate Vue code
+            const vueCode = generateVueCode(tag, propsData, cssVarsData);
+            const vueEl = document.getElementById('generatedCodeVue');
+            if (vueEl) {
+                vueEl.textContent = vueCode;
+                if (window.Prism) Prism.highlightElement(vueEl);
+            }
+        }
+
+        function generateHtmlCode(tag, propsData, cssVarsData, darkCssData) {
+            // Props as HTML attributes
+            const propsStr = propsData.length
+                ? `\n${propsData.map(p => `  ${p.name}="${p.value}"`).join('\n')}`
+                : '';
+
+            // CSS styles
+            let cssCode = '';
+            if (cssVarsData.length > 0) {
+                cssCode += `${tag} {\n${cssVarsData.map(c => `  ${c.name}: ${c.value};`).join('\n')}\n}`;
+            }
+            if (darkCssData.length > 0) {
+                cssCode += `\n\n/* Dark mode */\n@media (prefers-color-scheme: dark) {\n  ${tag} {\n  ${darkCssData.map(c => `  ${c.name}: ${c.value};`).join('\n  ')}\n  }\n}`;
+            }
+
+            // Use string concatenation to avoid Vite HTML parser issues with template literals
+            let code = '<!-' + '- Import the library -' + '->\n';
+            code += '<' + 'script type="module" src="https://cdn.example.com/search-snippet.es.js"><' + '/script>\n\n';
+            code += '<' + tag + propsStr + '>\n';
+            code += '</' + tag + '>';
+            if (cssCode) {
+                code += '\n\n<' + 'style>\n' + cssCode + '\n</' + 'style>';
+            }
+            return code;
+        }
+
+        function generateReactCode(tag, propsData, cssVarsData) {
+            // Convert props to React format (camelCase, proper value types)
+            const reactProps = propsData.map(p => {
+                const camelName = toCamelCase(p.name);
+                if (p.type === 'number') {
+                    return '      ' + camelName + '={' + p.value + '}';
+                } else if (p.type === 'boolean') {
+                    return '      ' + camelName + '={' + p.value + '}';
+                } else {
+                    return '      ' + camelName + '="' + p.value + '"';
+                }
+            });
+
+            // CSS variables as inline style
+            let styleAttr = '';
+            if (cssVarsData.length > 0) {
+                const styleObj = cssVarsData.map(c => "'" + c.name + "': '" + c.value + "'").join(', ');
+                styleAttr = '\n      style={{ ' + styleObj + ' } as React.CSSProperties}';
+            }
+
+            const hasProps = reactProps.length > 0 || styleAttr;
+            const propsStr = hasProps
+                ? '\n' + reactProps.join('\n') + styleAttr + '\n    '
+                : '';
+
+            // Use string concatenation to avoid Vite HTML parser issues
+            let code = 'import "@cloudflare/ai-search-snippet";\n\n';
+            code += 'export default function App() {\n';
+            code += '  return (\n';
+            code += '    <' + tag + propsStr + '/>\n';
+            code += '  );\n';
+            code += '}';
+            return code;
+        }
+
+        function generateVueCode(tag, propsData, cssVarsData) {
+            // Convert props to Vue format (kebab-case with : for bindings)
+            const vueProps = propsData.map(p => {
+                if (p.type === 'number' || p.type === 'boolean') {
+                    return '      :' + p.name + '="' + p.value + '"';
+                } else {
+                    return '      ' + p.name + '="' + p.value + '"';
+                }
+            });
+
+            // CSS variables as inline :style binding
+            let styleAttr = '';
+            if (cssVarsData.length > 0) {
+                const styleObj = cssVarsData.map(c => "'" + c.name + "': '" + c.value + "'").join(', ');
+                styleAttr = '\n      :style="{ ' + styleObj + ' }"';
+            }
+
+            const hasProps = vueProps.length > 0 || styleAttr;
+            const propsStr = hasProps
+                ? '\n' + vueProps.join('\n') + styleAttr + '\n    '
+                : '';
+
+            // Use string concatenation to avoid Vite HTML parser issues
+            let code = '<' + 'script setup lang="ts">\n';
+            code += 'import "@cloudflare/ai-search-snippet";\n';
+            code += '</' + 'script>\n\n';
+            code += '<' + 'template>\n';
+            code += '  <' + tag + propsStr + '/>\n';
+            code += '</' + 'template>';
+            return code;
         }
 
         function resetConfig() {
@@ -3689,19 +3890,20 @@ export default defineConfig({
             updatePreview();
         }
 
-        async function copyCode() {
-            const code = document.getElementById('generatedCode')?.textContent;
-            if (!code) return;
-            try {
-                await navigator.clipboard.writeText(code);
-                const btn = document.getElementById('copyBtn');
-                if (btn) {
-                    const orig = btn.innerHTML;
-                    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Copied!';
-                    setTimeout(() => { btn.innerHTML = orig }, 2000);
+        async function copyConfigCode(tab) {
+            const panel = document.querySelector(`[data-code-panel="${tab}"]`);
+            const codeBlock = panel?.querySelector('code');
+            const btn = panel?.querySelector('.code-copy');
+
+            if (codeBlock && btn) {
+                try {
+                    await navigator.clipboard.writeText(codeBlock.textContent);
+                    const orig = btn.textContent;
+                    btn.textContent = 'Copied!';
+                    setTimeout(() => { btn.textContent = orig }, 2000);
+                } catch (e) {
+                    console.error('Copy failed:', e);
                 }
-            } catch (e) {
-                console.error('Copy failed:', e);
             }
         }
 
@@ -3762,7 +3964,7 @@ export default defineConfig({
                 }
             });
 
-            // Tab switching inside modal
+            // Tab switching inside modal (component tabs)
             document.querySelectorAll('.config-tab').forEach(tab => {
                 tab.addEventListener('click', e => {
                     document.querySelectorAll('.config-tab').forEach(t => { t.classList.remove('active') });
@@ -3770,6 +3972,18 @@ export default defineConfig({
                     currentSnippet = e.target.dataset.snippet;
                     renderProps();
                     updatePreview();
+                });
+            });
+
+            // Code tab switching (HTML/React/Vue)
+            document.querySelectorAll('[data-code-tab]').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Update active tab
+                    document.querySelectorAll('[data-code-tab]').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    // Update active panel
+                    document.querySelectorAll('[data-code-panel]').forEach(p => p.classList.remove('active'));
+                    document.querySelector(`[data-code-panel="${tab.dataset.codeTab}"]`)?.classList.add('active');
                 });
             });
 
@@ -3786,7 +4000,6 @@ export default defineConfig({
 
             // Action buttons
             document.getElementById('resetBtn')?.addEventListener('click', resetConfig);
-            document.getElementById('copyBtn')?.addEventListener('click', copyCode);
 
             // Initial render (for when modal opens)
             renderProps();
