@@ -933,6 +933,47 @@
             gap: 0.5rem;
         }
 
+        .config-input-with-action {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .config-input-with-action .config-input {
+            flex: 1;
+        }
+
+        .use-demo-btn {
+            padding: 0.5rem 0.75rem;
+            background: var(--stone-100);
+            border: 1px solid var(--stone-200);
+            color: var(--stone-700);
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+
+        .use-demo-btn:hover {
+            background: var(--cf-orange);
+            border-color: var(--cf-orange);
+            color: white;
+        }
+
+        [data-theme="dark"] .use-demo-btn {
+            background: var(--stone-800);
+            border-color: var(--stone-700);
+            color: var(--stone-300);
+        }
+
+        [data-theme="dark"] .use-demo-btn:hover {
+            background: var(--cf-orange);
+            border-color: var(--cf-orange);
+            color: white;
+        }
+
         .config-input,
         .config-select {
             width: 100%;
@@ -3371,7 +3412,8 @@ export default defineConfig({
             return params.get('api-url');
         }
 
-        const DEFAULT_API_URL = getApiUrlFromQueryParams() || 'https://70b18965-6ccb-40df-902d-313de9c5c89e.search.ai.cloudflare.com/';
+        const DEMO_API_URL = 'https://70b18965-6ccb-40df-902d-313de9c5c89e.search.ai.cloudflare.com/';
+        const DEFAULT_API_URL = getApiUrlFromQueryParams() || '';
 
         const PROP_CONFIGS = [
             { name: 'api-url', type: 'text', defaultValue: DEFAULT_API_URL, description: 'API endpoint URL', appliesTo: ['search-bar', 'search-modal', 'chat-bubble', 'chat-page'] },
@@ -3445,6 +3487,10 @@ export default defineConfig({
                 } else if (prop.type === 'select') {
                     return `<div class="config-item"><label class="config-label">${prop.name}</label><select class="config-select" data-prop="${prop.name}">${prop.options.map(o => `<option value="${o}" ${value === o ? 'selected' : ''}>${o}</option>`).join('')}</select><div class="config-description">${prop.description}</div></div>`;
                 }
+                // Special handling for api-url to add "Use demo" button
+                if (prop.name === 'api-url') {
+                    return `<div class="config-item"><label class="config-label">${prop.name}</label><div class="config-input-with-action"><input type="${prop.type}" class="config-input" data-prop="${prop.name}" value="${value}" placeholder="Enter your API URL"><button type="button" class="use-demo-btn" id="useDemoBtn">Use demo</button></div><div class="config-description">${prop.description}</div></div>`;
+                }
                 return `<div class="config-item"><label class="config-label">${prop.name}</label><input type="${prop.type}" class="config-input" data-prop="${prop.name}" value="${value}" ${prop.type === 'number' ? 'min="0"' : ''}><div class="config-description">${prop.description}</div></div>`;
             }).join('');
 
@@ -3456,6 +3502,19 @@ export default defineConfig({
                     updatePreview();
                 });
             });
+
+            // Add event listener for "Use demo" button
+            const useDemoBtn = container.querySelector('#useDemoBtn');
+            if (useDemoBtn) {
+                useDemoBtn.addEventListener('click', () => {
+                    const apiUrlInput = container.querySelector('[data-prop="api-url"]');
+                    if (apiUrlInput) {
+                        apiUrlInput.value = DEMO_API_URL;
+                        propValues.set('api-url', DEMO_API_URL);
+                        updatePreview();
+                    }
+                });
+            }
         }
 
         function renderCSSVars() {
