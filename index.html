@@ -2348,6 +2348,12 @@ export default defineConfig({
                                 <td class="var-default">300</td>
                                 <td>Input debounce delay in milliseconds</td>
                             </tr>
+                            <tr>
+                                <td><code>show-url</code></td>
+                                <td>boolean</td>
+                                <td class="var-default">false</td>
+                                <td>Show URL in search results</td>
+                            </tr>
                         </tbody>
                     </table>
                     <h5 style="margin-top: 1rem; margin-bottom: 0.5rem; font-size: 0.875rem; color: var(--stone-700);">
@@ -2396,6 +2402,12 @@ export default defineConfig({
                                 <td>number</td>
                                 <td class="var-default">300</td>
                                 <td>Input debounce delay in milliseconds</td>
+                            </tr>
+                            <tr>
+                                <td><code>show-url</code></td>
+                                <td>boolean</td>
+                                <td class="var-default">false</td>
+                                <td>Show URL in search results</td>
                             </tr>
                             <tr>
                                 <td><code>shortcut</code></td>
@@ -3361,6 +3373,7 @@ export default defineConfig({
             { name: 'placeholder', type: 'text', defaultValue: 'Type a message...', description: 'Input placeholder text', appliesTo: ['search-bar', 'search-modal', 'chat-bubble', 'chat-page'] },
             { name: 'max-results', type: 'number', defaultValue: 10, description: 'Maximum number of results', appliesTo: ['search-bar', 'search-modal'] },
             { name: 'debounce-ms', type: 'number', defaultValue: 300, description: 'Debounce delay in milliseconds', appliesTo: ['search-bar', 'search-modal'] },
+            { name: 'show-url', type: 'boolean', defaultValue: false, description: 'Show URL in search results', appliesTo: ['search-bar', 'search-modal'] },
             { name: 'theme', type: 'select', options: ['light', 'dark', 'auto'], defaultValue: 'auto', description: 'Color theme', appliesTo: ['search-bar', 'search-modal', 'chat-bubble', 'chat-page'] },
             { name: 'shortcut', type: 'text', defaultValue: 'k', description: 'Keyboard shortcut key', appliesTo: ['search-modal'] },
             { name: 'use-meta-key', type: 'select', options: ['true', 'false'], defaultValue: 'true', description: 'Use Cmd/Ctrl modifier', appliesTo: ['search-modal'] },

@@ -67,6 +67,7 @@ export class SearchModalSnippet extends HTMLElement {
       'use-meta-key',
       'debounce-ms',
       'hide-branding',
+      'show-url',
     ] as const;
   }
 
@@ -106,6 +107,7 @@ export class SearchModalSnippet extends HTMLElement {
       shortcut: parseAttribute(this.getAttribute('shortcut'), 'k'),
       useMetaKey: this.getAttribute('use-meta-key') !== 'false',
       hideBranding: parseBooleanAttribute(this.getAttribute('hide-branding'), false),
+      showUrl: parseBooleanAttribute(this.getAttribute('show-url'), false),
     };
   }
 
@@ -387,6 +389,7 @@ export class SearchModalSnippet extends HTMLElement {
   }
 
   private renderResult(result: SearchResult, index: number): string {
+    const props = this.getProps();
     const imageHTML = this.renderResultImage(result.image, result.title);
     const href = result.url ? escapeHTML(result.url) : '#';
 
@@ -405,7 +408,7 @@ export class SearchModalSnippet extends HTMLElement {
         <div class="modal-result-content">
           <div class="modal-result-title">${escapeHTML(result.title || '')}</div>
           ${result.description ? `<div class="modal-result-description">${escapeHTML(result.description)}</div>` : ''}
-          ${result.url ? `<span class="modal-result-url">${escapeHTML(result.url)}</span>` : ''}
+          ${props.showUrl && result.url ? `<span class="modal-result-url">${escapeHTML(result.url)}</span>` : ''}
         </div>
       </a>
     `;

@@ -20,6 +20,8 @@ export interface SearchSnippetProps {
   theme?: Theme;
   /** Hide the "Powered by Cloudflare AI Search" branding */
   hideBranding?: boolean;
+  /** Show URL in search results (default: false) */
+  showUrl?: boolean;
 }
 
 /**

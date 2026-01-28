@@ -45,6 +45,7 @@ export class SearchBarSnippet extends HTMLElement {
       'debounce-ms',
       'theme',
       'hide-branding',
+      'show-url',
     ] as const;
   }
 
@@ -83,6 +84,7 @@ export class SearchBarSnippet extends HTMLElement {
       debounceMs: parseNumberAttribute(this.getAttribute('debounce-ms'), 300),
       theme: parseAttribute(this.getAttribute('theme'), 'auto') as 'light' | 'dark' | 'auto',
       hideBranding: parseBooleanAttribute(this.getAttribute('hide-branding'), false),
+      showUrl: parseBooleanAttribute(this.getAttribute('show-url'), false),
     };
   }
 
@@ -246,6 +248,7 @@ export class SearchBarSnippet extends HTMLElement {
   }
 
   private renderResult(result: SearchResult): string {
+    const props = this.getProps();
     const imageHTML = this.renderResultImage(result.image, result.title);
     const href = result.url ? escapeHTML(result.url) : '#';
 
@@ -255,7 +258,7 @@ export class SearchBarSnippet extends HTMLElement {
                 <div class="search-result-content">
                     <div class="search-result-title">${escapeHTML(result.title || '')}</div>
                     <div class="search-result-snippet">${escapeHTML(result.description || '')}</div>
-                    ${result.url ? `<span class="search-result-url">${escapeHTML(result.url)}</span>` : ''}
+                    ${props.showUrl && result.url ? `<span class="search-result-url">${escapeHTML(result.url)}</span>` : ''}
                 </div>
             </a>
         `;
