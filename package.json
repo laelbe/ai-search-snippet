@@ -1,6 +1,6 @@
 {
   "name": "@cloudflare/ai-search-snippet",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "description": "A production-ready, self-contained TypeScript Web Component library for search and chat interfaces with streaming support",
   "type": "module",
   "main": "./dist/search-snippet.umd.js",
@@ -32,12 +32,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/nlweb-cl-snippet.git"
+    "url": "https://github.com/cloudflare/ai-search-snippet.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/nlweb-cl-snippet/issues"
+    "url": "https://github.com/cloudflare/ai-search-snippet/issues"
   },
-  "homepage": "https://github.com/yourusername/nlweb-cl-snippet#readme",
+  "homepage": "https://github.com/cloudflare/ai-search-snippet#readme",
   "scripts": {
     "dev": "vite ",
     "build": "npm run build:app && npm run build:lib",
