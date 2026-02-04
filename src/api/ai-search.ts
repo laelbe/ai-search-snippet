@@ -27,7 +27,9 @@ export class AISearchClient extends Client {
         messages: [{ role: 'user', content: options.query }],
         stream: options.streaming,
         max_results: options.maxResults,
-        ...(operation === 'search' && { retrieval_options: { metadata_only: true } }),
+        ...(operation === 'search' && {
+          ai_search_options: { retrieval: { metadata_only: true } },
+        }),
       }),
       headers: {
         'Content-Type': 'application/json',
