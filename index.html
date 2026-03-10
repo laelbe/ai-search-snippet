@@ -75,6 +75,26 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            scrollbar-width: thin;
+            scrollbar-color: var(--stone-300) transparent;
+        }
+
+        *::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        *::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        *::-webkit-scrollbar-thumb {
+            background: var(--stone-300);
+            border-radius: 3px;
+        }
+
+        *::-webkit-scrollbar-thumb:hover {
+            background: var(--stone-400);
         }
 
         html {
@@ -427,10 +447,10 @@
             font-size: 0.75rem;
             font-weight: 500;
             color: white;
-            background: rgba(255, 255, 255, 0.15);
+            /* background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: var(--radius-full);
+            border-radius: var(--radius-full); */
             animation: bounce 2s ease-in-out infinite;
         }
 
@@ -1075,6 +1095,7 @@
         .preview-area {
             display: flex;
             flex-direction: column;
+            max-width: calc(100% - 305px);
         }
 
         .preview-section {
@@ -1281,7 +1302,8 @@
         .code-content {
             padding: 1rem;
             overflow-x: auto;
-            background: #1e1e1e;
+            background: #2d2d2d;
+
         }
 
         .code-content pre {
@@ -1380,10 +1402,10 @@
         .css-vars-table code {
             font-family: var(--font-mono);
             font-size: 0.75rem;
-            background: var(--stone-200);
+            background: rgba(246, 130, 31, 0.1);
             padding: 0.125rem 0.375rem;
             border-radius: 4px;
-            color: var(--cf-orange);
+            color: var(--cf-orange-dark);
         }
 
         .css-vars-table .var-default {
@@ -1722,6 +1744,10 @@
             width: 100%;
         }
 
+        [data-theme="dark"] .component-preview {
+            background-color: var(--stone-100);
+        }
+
         .component-preview svg {
             width: 100%;
             height: auto;
@@ -1829,10 +1855,22 @@
             </div>
 
             <p class="hero-mcp-note">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round">
-                    <path
-                        d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+                <svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180" fill="none">
+                    <mask id="mask0_246_1229" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="7" y="7"
+                        width="166" height="166">
+                        <path d="M173 7H7V173H173V7Z" fill="white" />
+                    </mask>
+                    <g>
+                        <path
+                            d="M23.5996 85.2532L86.2021 22.6507C94.8457 14.0071 108.86 14.0071 117.503 22.6507C126.147 31.2942 126.147 45.3083 117.503 53.9519L70.2254 101.23"
+                            stroke="white" stroke-width="11.0667" stroke-linecap="round" />
+                        <path
+                            d="M70.8789 100.578L117.504 53.952C126.148 45.3083 140.163 45.3083 148.806 53.952L149.132 54.278C157.776 62.9216 157.776 76.9357 149.132 85.5792L92.5139 142.198C89.6327 145.079 89.6327 149.75 92.5139 152.631L104.14 164.257"
+                            stroke="white" stroke-width="11.0667" stroke-linecap="round" />
+                        <path
+                            d="M101.853 38.3013L55.553 84.6011C46.9094 93.2447 46.9094 107.258 55.553 115.902C64.1966 124.546 78.2106 124.546 86.8543 115.902L133.154 69.6025"
+                            stroke="white" stroke-width="11.0667" stroke-linecap="round" />
+                    </g>
                 </svg>
                 <span>Using Cloudflare AI Search? It also includes an <a
                         href="https://developers.cloudflare.com/ai-search/mcp/" target="_blank"
@@ -1851,26 +1889,29 @@
                     <div class="component-preview">
                         <svg viewBox="0 0 180 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <!-- Screen frame -->
-                            <rect x="4" y="4" width="172" height="112" rx="4" fill="#f5f5f4" stroke="#e7e5e4"
-                                stroke-width="1" />
+                            <rect x="4" y="4" width="172" height="112" rx="4" stroke-width="1"
+                                style="fill: var(--stone-100); stroke: var(--stone-200)" />
                             <!-- Page content lines -->
-                            <rect x="12" y="12" width="80" height="6" rx="2" fill="#e7e5e4" />
-                            <rect x="12" y="22" width="120" height="4" rx="1" fill="#e7e5e4" />
+                            <rect x="12" y="12" width="80" height="6" rx="2" style="fill: var(--stone-200)" />
+                            <rect x="12" y="22" width="120" height="4" rx="1" style="fill: var(--stone-200)" />
                             <!-- Search bar + dropdown combined container -->
-                            <rect x="12" y="32" width="156" height="76" rx="6" fill="#fff" stroke="#d6d3d1"
-                                stroke-width="1.5" />
+                            <rect x="12" y="32" width="156" height="76" rx="6" stroke-width="1.5"
+                                style="fill: var(--stone-50); stroke: var(--stone-300)" />
                             <!-- Search input area -->
-                            <circle cx="28" cy="46" r="6" stroke="#a8a29e" stroke-width="1.5" fill="none" />
-                            <path d="M32 50L35 53" stroke="#a8a29e" stroke-width="1.5" stroke-linecap="round" />
-                            <rect x="42" y="43" width="60" height="6" rx="2" fill="#d6d3d1" />
+                            <circle cx="28" cy="46" r="6" stroke-width="1.5" fill="none"
+                                style="stroke: var(--stone-400)" />
+                            <path d="M32 50L35 53" stroke-width="1.5" stroke-linecap="round"
+                                style="stroke: var(--stone-400)" />
+                            <rect x="42" y="43" width="60" height="6" rx="2" style="fill: var(--stone-300)" />
                             <rect x="126" y="38" width="36" height="18" rx="4" fill="#F6821F" />
                             <!-- Divider line -->
-                            <line x1="20" y1="62" x2="160" y2="62" stroke="#e7e5e4" stroke-width="1" />
+                            <line x1="20" y1="62" x2="160" y2="62" stroke-width="1"
+                                style="stroke: var(--stone-200)" />
                             <!-- Results -->
-                            <rect x="20" y="70" width="100" height="5" rx="1" fill="#d6d3d1" />
-                            <rect x="20" y="79" width="80" height="3" rx="1" fill="#e7e5e4" />
-                            <rect x="20" y="90" width="90" height="5" rx="1" fill="#d6d3d1" />
-                            <rect x="20" y="99" width="70" height="3" rx="1" fill="#e7e5e4" />
+                            <rect x="20" y="70" width="100" height="5" rx="1" style="fill: var(--stone-300)" />
+                            <rect x="20" y="79" width="80" height="3" rx="1" style="fill: var(--stone-200)" />
+                            <rect x="20" y="90" width="90" height="5" rx="1" style="fill: var(--stone-300)" />
+                            <rect x="20" y="99" width="70" height="3" rx="1" style="fill: var(--stone-200)" />
                         </svg>
                     </div>
                     <div class="content">
@@ -1885,30 +1926,33 @@
                     <div class="component-preview">
                         <svg viewBox="0 0 180 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <!-- Screen frame -->
-                            <rect x="4" y="4" width="172" height="112" rx="4" fill="#f5f5f4" stroke="#e7e5e4"
-                                stroke-width="1" />
-                            <rect x="12" y="12" width="60" height="5" rx="1" fill="#e7e5e4" />
-                            <rect x="12" y="22" width="100" height="4" rx="1" fill="#e7e5e4" />
-                            <rect x="12" y="30" width="80" height="4" rx="1" fill="#e7e5e4" />
+                            <rect x="4" y="4" width="172" height="112" rx="4" stroke-width="1"
+                                style="fill: var(--stone-100); stroke: var(--stone-200)" />
+                            <rect x="12" y="12" width="60" height="5" rx="1" style="fill: var(--stone-200)" />
+                            <rect x="12" y="22" width="100" height="4" rx="1" style="fill: var(--stone-200)" />
+                            <rect x="12" y="30" width="80" height="4" rx="1" style="fill: var(--stone-200)" />
                             <!-- Modal overlay -->
-                            <rect x="20" y="20" width="140" height="92" rx="8" fill="#fff" stroke="#d6d3d1"
-                                stroke-width="1.5" />
+                            <rect x="20" y="20" width="140" height="92" rx="8" stroke-width="1.5"
+                                style="fill: var(--stone-50); stroke: var(--stone-300)" />
                             <!-- Search bar area -->
-                            <circle cx="36" cy="36" r="5" stroke="#a8a29e" stroke-width="1.5" fill="none" />
-                            <path d="M40 40L42 42" stroke="#a8a29e" stroke-width="1.5" stroke-linecap="round" />
-                            <rect x="48" y="33" width="60" height="5" rx="1" fill="#d6d3d1" />
+                            <circle cx="36" cy="36" r="5" stroke-width="1.5" fill="none"
+                                style="stroke: var(--stone-400)" />
+                            <path d="M40 40L42 42" stroke-width="1.5" stroke-linecap="round"
+                                style="stroke: var(--stone-400)" />
+                            <rect x="48" y="33" width="60" height="5" rx="1" style="fill: var(--stone-300)" />
                             <!-- Kbd shortcut -->
-                            <rect x="130" y="30" width="22" height="12" rx="2" fill="#e7e5e4" />
-                            <text x="141" y="39" font-size="7" fill="#78716c" text-anchor="middle"
-                                font-family="system-ui">esc</text>
+                            <rect x="130" y="30" width="22" height="12" rx="2" style="fill: var(--stone-200)" />
+                            <text x="141" y="39" font-size="7" text-anchor="middle" font-family="system-ui"
+                                style="fill: var(--stone-500)">esc</text>
                             <!-- Divider line -->
-                            <line x1="28" y1="50" x2="152" y2="50" stroke="#e7e5e4" stroke-width="1" />
+                            <line x1="28" y1="50" x2="152" y2="50" stroke-width="1"
+                                style="stroke: var(--stone-200)" />
                             <!-- Results -->
-                            <rect x="28" y="58" width="100" height="5" rx="1" fill="#d6d3d1" />
-                            <rect x="28" y="67" width="80" height="3" rx="1" fill="#e7e5e4" />
-                            <rect x="28" y="78" width="90" height="5" rx="1" fill="#d6d3d1" />
-                            <rect x="28" y="87" width="70" height="3" rx="1" fill="#e7e5e4" />
-                            <rect x="28" y="98" width="85" height="5" rx="1" fill="#d6d3d1" />
+                            <rect x="28" y="58" width="100" height="5" rx="1" style="fill: var(--stone-300)" />
+                            <rect x="28" y="67" width="80" height="3" rx="1" style="fill: var(--stone-200)" />
+                            <rect x="28" y="78" width="90" height="5" rx="1" style="fill: var(--stone-300)" />
+                            <rect x="28" y="87" width="70" height="3" rx="1" style="fill: var(--stone-200)" />
+                            <rect x="28" y="98" width="85" height="5" rx="1" style="fill: var(--stone-300)" />
                         </svg>
                     </div>
                     <div class="content">
@@ -1923,15 +1967,15 @@
                     <div class="component-preview">
                         <svg viewBox="0 0 180 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <!-- Screen frame -->
-                            <rect x="4" y="4" width="172" height="112" rx="4" fill="#f5f5f4" stroke="#e7e5e4"
-                                stroke-width="1" />
+                            <rect x="4" y="4" width="172" height="112" rx="4" stroke-width="1"
+                                style="fill: var(--stone-100); stroke: var(--stone-200)" />
                             <!-- Page content -->
-                            <rect x="12" y="12" width="70" height="6" rx="2" fill="#e7e5e4" />
-                            <rect x="12" y="24" width="120" height="4" rx="1" fill="#e7e5e4" />
-                            <rect x="12" y="32" width="100" height="4" rx="1" fill="#e7e5e4" />
-                            <rect x="12" y="40" width="110" height="4" rx="1" fill="#e7e5e4" />
-                            <rect x="12" y="52" width="60" height="5" rx="1" fill="#e7e5e4" />
-                            <rect x="12" y="62" width="90" height="4" rx="1" fill="#e7e5e4" />
+                            <rect x="12" y="12" width="70" height="6" rx="2" style="fill: var(--stone-200)" />
+                            <rect x="12" y="24" width="120" height="4" rx="1" style="fill: var(--stone-200)" />
+                            <rect x="12" y="32" width="100" height="4" rx="1" style="fill: var(--stone-200)" />
+                            <rect x="12" y="40" width="110" height="4" rx="1" style="fill: var(--stone-200)" />
+                            <rect x="12" y="52" width="60" height="5" rx="1" style="fill: var(--stone-200)" />
+                            <rect x="12" y="62" width="90" height="4" rx="1" style="fill: var(--stone-200)" />
                             <!-- Floating chat bubble -->
                             <circle cx="148" cy="88" r="20" fill="#F6821F" />
                             <!-- Chat icon -->
@@ -1953,27 +1997,27 @@
                     <div class="component-preview">
                         <svg viewBox="0 0 180 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <!-- Screen frame -->
-                            <rect x="4" y="4" width="172" height="112" rx="4" fill="#f5f5f4" stroke="#e7e5e4"
-                                stroke-width="1" />
-                            <!-- Main content area (white) -->
-                            <rect x="56" y="5" width="119" height="110" fill="#fff" />
+                            <rect x="4" y="4" width="172" height="112" rx="4" stroke-width="1"
+                                style="fill: var(--stone-100); stroke: var(--stone-200)" />
+                            <!-- Main content area -->
+                            <rect x="56" y="5" width="119" height="110" style="fill: var(--stone-50)" />
                             <!-- Sidebar -->
-                            <rect x="5" y="5" width="50" height="110" fill="#f5f5f4" />
-                            <path d="M55 5V115" stroke="#e7e5e4" stroke-width="1" />
+                            <rect x="5" y="5" width="50" height="110" style="fill: var(--stone-100)" />
+                            <path d="M55 5V115" stroke-width="1" style="stroke: var(--stone-200)" />
                             <!-- Sidebar items -->
-                            <rect x="12" y="16" width="32" height="6" rx="2" fill="#d6d3d1" />
-                            <rect x="12" y="28" width="28" height="4" rx="1" fill="#e7e5e4" />
-                            <rect x="12" y="36" width="26" height="4" rx="1" fill="#e7e5e4" />
-                            <rect x="12" y="44" width="30" height="4" rx="1" fill="#e7e5e4" />
+                            <rect x="12" y="16" width="32" height="6" rx="2" style="fill: var(--stone-300)" />
+                            <rect x="12" y="28" width="28" height="4" rx="1" style="fill: var(--stone-200)" />
+                            <rect x="12" y="36" width="26" height="4" rx="1" style="fill: var(--stone-200)" />
+                            <rect x="12" y="44" width="30" height="4" rx="1" style="fill: var(--stone-200)" />
                             <!-- Chat area -->
-                            <rect x="64" y="16" width="80" height="12" rx="4" fill="#f5f5f4" />
+                            <rect x="64" y="16" width="80" height="12" rx="4" style="fill: var(--stone-100)" />
                             <rect x="84" y="34" width="86" height="12" rx="4" fill="#F6821F" opacity="0.15" />
-                            <rect x="64" y="52" width="70" height="12" rx="4" fill="#f5f5f4" />
+                            <rect x="64" y="52" width="70" height="12" rx="4" style="fill: var(--stone-100)" />
                             <rect x="94" y="70" width="76" height="12" rx="4" fill="#F6821F" opacity="0.15" />
                             <!-- Input area -->
-                            <rect x="60" y="92" width="110" height="20" rx="4" fill="#f5f5f4" stroke="#e7e5e4"
-                                stroke-width="1" />
-                            <rect x="68" y="99" width="60" height="5" rx="1" fill="#d6d3d1" />
+                            <rect x="60" y="92" width="110" height="20" rx="4" stroke-width="1"
+                                style="fill: var(--stone-100); stroke: var(--stone-200)" />
+                            <rect x="68" y="99" width="60" height="5" rx="1" style="fill: var(--stone-300)" />
                         </svg>
                     </div>
                     <div class="content">
