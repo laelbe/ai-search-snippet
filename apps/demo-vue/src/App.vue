@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import HelloWorld from "./components/HelloWorld.vue";
-import "@cloudflare/ai-search-snippet";
-import { useTemplateRef } from "vue";
+import HelloWorld from './components/HelloWorld.vue';
+import '@cloudflare/ai-search-snippet';
+import { useTemplateRef } from 'vue';
 
-const modalSearch = useTemplateRef("modalSearch");
-
+const modalSearch = useTemplateRef('modalSearch');
 </script>
 
 <template>

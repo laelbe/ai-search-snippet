@@ -1,8 +1,8 @@
-import { useRef, useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
-import type { SearchModalSnippet } from "@cloudflare/ai-search-snippet";
+import { useRef, useState } from 'react';
+import viteLogo from '/vite.svg';
+import reactLogo from './assets/react.svg';
+import './App.css';
+import type { SearchModalSnippet } from '@cloudflare/ai-search-snippet';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -28,9 +28,7 @@ function App() {
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
       <search-bar-snippet apiUrl="http://localhost:8787" />
       <br />
 
@@ -43,10 +41,7 @@ function App() {
         Show Modal Search (CMD+K)
       </button>
 
-      <search-modal-snippet
-        apiUrl="http://localhost:8787"
-        ref={searchModalRef}
-      />
+      <search-modal-snippet apiUrl="http://localhost:8787" ref={searchModalRef} />
     </>
   );
 }
