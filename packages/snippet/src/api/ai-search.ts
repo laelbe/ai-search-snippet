@@ -61,7 +61,7 @@ export class AISearchClient {
         {
           query,
           streaming: false,
-          maxResults: 30,
+          maxResults: options.maxResults || 30,
         } satisfies SearchOptions,
         'search',
         signal
