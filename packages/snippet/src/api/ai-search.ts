@@ -151,7 +151,7 @@ export class AISearchClient {
           ai_search_options: {
             retrieval: {
               metadata_only: true,
-              max_results: options.maxResults ?? 30,
+              max_num_results: options.maxResults ?? 30,
             },
           },
         },
@@ -211,7 +211,7 @@ export class AISearchClient {
         messages: [{ role: 'user', content: query }],
         stream: true,
         ...(options.maxResults !== undefined && {
-          max_results: options.maxResults,
+          max_num_results: options.maxResults,
         }),
       },
       'ai-search',
