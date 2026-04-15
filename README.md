@@ -103,7 +103,7 @@ Additional attributes for `<search-bar-snippet>` and `<search-modal-snippet>`:
 
 | Attribute     | Type    | Default | Description                                      |
 | ------------- | ------- | ------- | ------------------------------------------------ |
-| `max-results` | number  | `10`    | Maximum search results to display                |
+| `max-results` | number  | `10`    | Maximum search results to display. Values above `50` fall back to `10` |
 | `debounce-ms` | number  | `300`   | Input debounce delay in milliseconds             |
 | `show-url`    | boolean | `false` | Show URL in search results                       |
 | `show-date`   | boolean | `false` | Show result dates when a timestamp is available  |

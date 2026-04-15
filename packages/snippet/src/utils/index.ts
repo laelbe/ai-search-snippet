@@ -6,6 +6,9 @@ import { AISearchClient } from '../api/ai-search.ts';
 
 export { LOADING_MESSAGE_INTERVAL_MS, LOADING_MESSAGES } from './loading-messages.ts';
 
+export const DEFAULT_MAX_RESULTS = 10;
+export const MAX_ALLOWED_MAX_RESULTS = 50;
+
 /**
  * Debounce function to limit API calls
  */
@@ -132,6 +135,20 @@ export function parseNumberAttribute(value: string | null, defaultValue: number)
   if (value === null) return defaultValue;
   const parsed = Number.parseInt(value, 10);
   return Number.isNaN(parsed) ? defaultValue : parsed;
+}
+
+export function normalizeMaxResults(maxResults: number | undefined): number {
+  if (maxResults === undefined || !Number.isFinite(maxResults)) {
+    return DEFAULT_MAX_RESULTS;
+  }
+
+  const normalized = Math.trunc(maxResults);
+
+  if (normalized < 1 || normalized > MAX_ALLOWED_MAX_RESULTS) {
+    return DEFAULT_MAX_RESULTS;
+  }
+
+  return normalized;
 }
 
 /**

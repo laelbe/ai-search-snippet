@@ -14,7 +14,7 @@ import type {
   SearchRequestOptions,
   SearchResult,
 } from '../types/index.ts';
-import { decodeHTMLEntities } from '../utils/index.ts';
+import { decodeHTMLEntities, normalizeMaxResults } from '../utils/index.ts';
 
 type RequestOperation = 'ai-search' | 'search' | 'chat/completions';
 
@@ -104,6 +104,42 @@ function normalizeBody(
   return isRecord(body) ? body : undefined;
 }
 
+function sanitizeMaxResultsFields(
+  body: Record<string, unknown>,
+  operation: RequestOperation
+): Record<string, unknown> {
+  if (operation === 'ai-search' && 'max_results' in body) {
+    const { max_results: _ignored, ...rest } = body;
+    return rest;
+  }
+
+  if (operation !== 'search') {
+    return body;
+  }
+
+  const aiSearchOptions = body.ai_search_options;
+
+  if (!isRecord(aiSearchOptions) || !isRecord(aiSearchOptions.retrieval)) {
+    return body;
+  }
+
+  const retrieval = aiSearchOptions.retrieval;
+
+  if (!('max_results' in retrieval)) {
+    return body;
+  }
+
+  const { max_results: _ignored, ...restRetrieval } = retrieval;
+
+  return {
+    ...body,
+    ai_search_options: {
+      ...aiSearchOptions,
+      retrieval: restRetrieval,
+    },
+  };
+}
+
 export class AISearchClient {
   activeRequests: Map<string, RequestState> = new Map();
   baseUrl: string;
@@ -120,10 +156,14 @@ export class AISearchClient {
   ): Promise<Response> {
     const sourceHeader = operation === 'search' ? 'snippet-search' : 'snippet-chat-completions';
     const url = buildRequestUrl(`${this.baseUrl}/${operation}`, requestOptions?.queryParams);
+    const requestBody = sanitizeMaxResultsFields(
+      deepMergeRecords(normalizeBody(requestOptions?.body), body),
+      operation
+    );
 
     return fetch(url, {
       method: 'POST',
-      body: JSON.stringify(deepMergeRecords(normalizeBody(requestOptions?.body), body)),
+      body: JSON.stringify(requestBody),
       headers: {
         ...normalizeHeaders(requestOptions?.headers),
         'Content-Type': 'application/json',
@@ -140,6 +180,7 @@ export class AISearchClient {
     const requestId = this.generateRequestId();
     const controller = new AbortController();
     const signal = options.signal || controller.signal;
+    const maxResults = normalizeMaxResults(options.maxResults);
 
     this.registerRequest(requestId, controller);
 
@@ -151,7 +192,7 @@ export class AISearchClient {
           ai_search_options: {
             retrieval: {
               metadata_only: true,
-              max_num_results: options.maxResults ?? 30,
+              max_num_results: maxResults,
             },
           },
         },
@@ -206,6 +247,7 @@ export class AISearchClient {
     const requestId = this.generateRequestId();
     const controller = new AbortController();
     const signal = options.signal || controller.signal;
+    const maxResults = normalizeMaxResults(options.maxResults);
 
     this.registerRequest(requestId, controller);
 
@@ -213,9 +255,7 @@ export class AISearchClient {
       {
         messages: [{ role: 'user', content: query }],
         stream: true,
-        ...(options.maxResults !== undefined && {
-          max_num_results: options.maxResults,
-        }),
+        max_num_results: maxResults,
       },
       'ai-search',
       signal,

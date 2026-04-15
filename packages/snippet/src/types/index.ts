@@ -12,7 +12,7 @@ export interface SearchSnippetProps {
   apiUrl: string;
   /** Input placeholder text */
   placeholder?: string;
-  /** Maximum search results to display  */
+  /** Maximum search results to display (default: 10, values above 50 fall back to 10) */
   maxResults?: number;
   /** Input debounce delay in milliseconds (search-bar only) */
   debounceMs?: number;
@@ -92,7 +92,7 @@ export interface SearchOptions {
   query?: string;
   streaming?: boolean;
   signal?: AbortSignal;
-  /** Maximum search results to request from the API */
+  /** Maximum search results to request from the API (default: 10, values above 50 fall back to 10) */
   maxResults?: number;
   /** Additional request fields for search endpoints */
   request?: SearchRequestOptions;

@@ -123,7 +123,7 @@ describe('AISearchClient request enrichment', () => {
       ai_search_options: {
         retrieval: {
           metadata_only: true,
-          max_results: 5,
+          max_num_results: 5,
           top_k: 5,
         },
         filters: {
@@ -168,7 +168,7 @@ describe('AISearchClient request enrichment', () => {
     expect(body).toEqual({
       messages: [{ role: 'user', content: 'streaming query' }],
       stream: true,
-      max_results: 3,
+      max_num_results: 3,
       custom: 'stream',
     });
     expect(streamResults).toEqual([
@@ -200,5 +200,47 @@ describe('AISearchClient request enrichment', () => {
     const [url] = fetchMock.mock.calls[0] as [string, RequestInit];
 
     expect(url).toBe('/api/search?locale=en');
+  });
+
+  it('uses the default max result count when one is not provided', async () => {
+    vi.stubGlobal('DOMParser', MockDOMParser);
+
+    const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue(createSearchResponse());
+    const client = new AISearchClient('https://example.com/');
+
+    await client.search('default query');
+
+    const [, init] = fetchMock.mock.calls[0] as [string, RequestInit];
+    const body = JSON.parse(init.body as string) as Record<string, unknown>;
+
+    expect(body).toMatchObject({
+      ai_search_options: {
+        retrieval: {
+          max_num_results: 10,
+        },
+      },
+    });
+  });
+
+  it('falls back to the default max result count when the requested value is above the limit', async () => {
+    vi.stubGlobal('DOMParser', MockDOMParser);
+
+    const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue(createSearchResponse());
+    const client = new AISearchClient('https://example.com/');
+
+    await client.search('clamped query', {
+      maxResults: 51,
+    });
+
+    const [, init] = fetchMock.mock.calls[0] as [string, RequestInit];
+    const body = JSON.parse(init.body as string) as Record<string, unknown>;
+
+    expect(body).toMatchObject({
+      ai_search_options: {
+        retrieval: {
+          max_num_results: 10,
+        },
+      },
+    });
   });
 });

@@ -12,20 +12,20 @@ import type { SearchRequestOptions, SearchResult, SearchSnippetProps } from '../
 import {
   createClient,
   createCustomEvent,
+  DEFAULT_MAX_RESULTS,
   debounce,
   escapeHTML,
   formatDate,
   formatDisplayUrl,
   LOADING_MESSAGE_INTERVAL_MS,
   LOADING_MESSAGES,
+  normalizeMaxResults,
   parseAttribute,
   parseBooleanAttribute,
   parseNumberAttribute,
 } from '../utils/index.ts';
 
 const COMPONENT_NAME = 'search-modal-snippet';
-const DEFAULT_DISPLAY_RESULTS = 10;
-const REQUEST_MAX_RESULTS = 50;
 
 export interface SearchModalProps extends SearchSnippetProps {
   /** Keyboard shortcut key (default: 'k') */
@@ -110,10 +110,14 @@ export class SearchModalSnippet extends HTMLElement {
   }
 
   private getProps(): SearchModalProps {
+    const maxResults = normalizeMaxResults(
+      parseNumberAttribute(this.getAttribute('max-results'), DEFAULT_MAX_RESULTS)
+    );
+
     return {
       apiUrl: parseAttribute(this.getAttribute('api-url'), ''),
       placeholder: parseAttribute(this.getAttribute('placeholder'), 'Search...'),
-      maxResults: parseNumberAttribute(this.getAttribute('max-results'), 10),
+      maxResults,
       debounceMs: parseNumberAttribute(this.getAttribute('debounce-ms'), 300),
       theme: parseAttribute(this.getAttribute('theme'), 'auto') as 'light' | 'dark' | 'auto',
       shortcut: parseAttribute(this.getAttribute('shortcut'), 'k'),
@@ -406,13 +410,13 @@ export class SearchModalSnippet extends HTMLElement {
     this.showLoadingState();
 
     try {
+      const props = this.getProps();
       const results = await this.client.search(query, {
         signal: this.currentSearchController.signal,
-        maxResults: REQUEST_MAX_RESULTS,
+        maxResults: props.maxResults,
         request: this.getRequestOptions(),
       });
-      const props = this.getProps();
-      this.results = results.slice(0, props.maxResults || DEFAULT_DISPLAY_RESULTS);
+      this.results = results.slice(0, props.maxResults);
       this.activeIndex = this.results.length > 0 ? 0 : -1;
       this.displayResults(this.results, query, results.length);
     } catch (error) {
