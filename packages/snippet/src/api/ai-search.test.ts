@@ -90,11 +90,11 @@ describe('AISearchClient request enrichment', () => {
         },
         body: {
           custom: 'value',
-          max_results: 99,
           messages: [{ role: 'system', content: 'ignored' }],
           ai_search_options: {
             retrieval: {
               metadata_only: false,
+              max_results: 99,
               top_k: 5,
             },
             filters: {
@@ -119,11 +119,11 @@ describe('AISearchClient request enrichment', () => {
     expect(body).toEqual({
       messages: [{ role: 'user', content: 'cloudflare' }],
       stream: false,
-      max_results: 5,
       custom: 'value',
       ai_search_options: {
         retrieval: {
           metadata_only: true,
+          max_results: 5,
           top_k: 5,
         },
         filters: {
